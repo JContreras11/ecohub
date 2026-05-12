@@ -1,0 +1,430 @@
+{
+  "name": "AXIS - Auto-Publicador SEO WordPress (Sheets + Ollama Solarpunk)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0001-4001-8001-000000000001",
+      "name": "Schedule Trigger Diario",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "REEMPLAZAR_ID_GOOGLE_SHEET",
+          "mode": "list",
+          "cachedResultName": "AXIS - Cola Editorial"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Temas"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "estado",
+              "lookupValue": "pendiente"
+            }
+          ]
+        },
+        "combineFilters": "AND",
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "id": "a1b2c3d4-0002-4002-8002-000000000002",
+      "name": "Leer Tema Pendiente (Sheets)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        400,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama3\",\n  \"stream\": false,\n  \"format\": \"json\",\n  \"options\": { \"temperature\": 0.4 },\n  \"prompt\": \"Eres un estratega SEO senior con visión solarpunk. A partir del BRIEF, devuelve EXCLUSIVAMENTE un objeto JSON válido (sin texto adicional, sin markdown, sin comentarios) con estas tres claves exactas:\\n- titulo_h1: string, máximo 70 caracteres, atractivo y optimizado para SEO.\\n- meta_descripcion: string entre 140 y 160 caracteres, con call-to-action.\\n- palabra_clave_principal: string, una sola frase clave en minúsculas, sin tildes ni signos, separada por espacios, máximo 4 palabras (prioriza términos sugeridos si encajan con el tema).\\n\\nBRIEF:\\nTEMA: \" + $json.tema + \"\\nANGULO_SOLARPUNK: \" + ($json.angulo_solarpunk || 'tecnología y naturaleza unidas, comunidad sobre corporación') + \"\\nAUDIENCIA: \" + ($json.audiencia || 'lectores curiosos, activistas y makers') + \"\\nPALABRAS_CLAVE_SUGERIDAS: \" + ($json.palabras_clave_extra || 'ninguna')\n}",
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0003-4003-8003-000000000003",
+      "name": "Ollama - Estrategia SEO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama3\",\n  \"stream\": false,\n  \"options\": { \"temperature\": 0.85, \"num_predict\": 3072 },\n  \"prompt\": \"Eres un redactor SEO con estética SOLARPUNK y tono REBELDE: tecnología y naturaleza unidas, optimismo combativo, lenguaje directo, sin tecnicismos vacíos. Redacta un artículo en HTML PURO (sin <html>, sin <head>, sin <body>) sobre el siguiente brief.\\n\\nTITULO_H1: \" + JSON.parse($json.response).titulo_h1 + \"\\nPALABRA_CLAVE_PRINCIPAL: \" + JSON.parse($json.response).palabra_clave_principal + \"\\nMETA_DESCRIPCION: \" + JSON.parse($json.response).meta_descripcion + \"\\nANGULO_SOLARPUNK: \" + ($('Leer Tema Pendiente (Sheets)').first().json.angulo_solarpunk || 'tecnología y naturaleza unidas') + \"\\nAUDIENCIA: \" + ($('Leer Tema Pendiente (Sheets)').first().json.audiencia || 'lectores curiosos') + \"\\nTONO_PERSONALIZADO: \" + ($('Leer Tema Pendiente (Sheets)').first().json.tono_personalizado || 'rebelde, esperanzador, combativo') + \"\\nLONGITUD_OBJETIVO_PALABRAS: \" + ($('Leer Tema Pendiente (Sheets)').first().json.longitud_objetivo || 1200) + \"\\n\\nREGLAS ESTRICTAS DE FORMATO:\\n1) Comienza con un único <h1> con el TITULO_H1, seguido de párrafos <p>, y secciones <h2> con subsecciones <h3>.\\n2) Mínimo 3 secciones <h2> y al menos 2 <h3>.\\n3) Densidad natural de la palabra clave principal (entre 4 y 6 menciones en total).\\n4) Tono solarpunk-rebelde: paneles solares cubiertos de musgo, ciudades-bosque, cooperativas autónomas, ruptura con extractivismo.\\n5) DEBES insertar EXACTAMENTE el marcador literal [INYECCION_PUBLICIDAD] (en mayúsculas, entre corchetes) en una línea propia INMEDIATAMENTE DESPUÉS del segundo párrafo <p> del artículo. No lo modifiques, no lo traduzcas, no lo envuelvas en HTML.\\n6) Devuelve SOLO el HTML del artículo, sin explicaciones previas ni posteriores, sin bloques markdown.\"\n}",
+        "options": {
+          "timeout": 240000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0004-4004-8004-000000000004",
+      "name": "Ollama - Redactor Contenido",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Inyecta bloque genérico de publicidad en el marcador [INYECCION_PUBLICIDAD]\nconst htmlGenerado = $input.first().json.response || '';\nconst seo = JSON.parse($('Ollama - Estrategia SEO').first().json.response);\nconst sheet = $('Leer Tema Pendiente (Sheets)').first().json;\n\nconst bloqueAnuncio = `\\n<div class=\"axis-ad-block\" style=\"margin:28px 0;padding:18px 20px;border:1px solid #d8e2d4;background:#f5f9f1;border-radius:8px;text-align:center;\">\\n  <p style=\"font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7a8b6f;margin:0 0 10px;\">Publicidad</p>\\n  <script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\" crossorigin=\"anonymous\"></script>\\n  <ins class=\"adsbygoogle\" style=\"display:block;\" data-ad-client=\"ca-pub-XXXXXXXXXXXXXXXX\" data-ad-slot=\"XXXXXXXXXX\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>\\n  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>\\n</div>\\n`;\n\nlet htmlFinal = htmlGenerado.replace('[INYECCION_PUBLICIDAD]', bloqueAnuncio);\n\n// Fallback: si el modelo no insertó el marcador, lo añadimos tras el segundo </p>\nif (!htmlGenerado.includes('[INYECCION_PUBLICIDAD]')) {\n  let count = 0;\n  htmlFinal = htmlGenerado.replace(/<\\/p>/g, (match) => {\n    count++;\n    return count === 2 ? match + bloqueAnuncio : match;\n  });\n}\n\nreturn [{\n  json: {\n    sheet_row_id: sheet.id,\n    titulo_h1: seo.titulo_h1,\n    meta_descripcion: seo.meta_descripcion,\n    palabra_clave_principal: seo.palabra_clave_principal,\n    contenido_html_final: htmlFinal,\n    categoria_wp_id: sheet.categoria_wp_id || null,\n    etiquetas_wp_ids: sheet.etiquetas_wp_ids || ''\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0005-4005-8005-000000000005",
+      "name": "Inyectar Publicidad",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.palabra_clave_principal }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "REEMPLAZAR_ID_CARPETA_BANCO_IMAGENES",
+            "mode": "list",
+            "cachedResultName": "Banco de Imágenes AXIS"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {
+          "fields": [
+            "id",
+            "name",
+            "mimeType"
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0006-4006-8006-000000000006",
+      "name": "Buscar Imagen en Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        400
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "GOOGLE_DRIVE_CRED_ID",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://TU-DOMINIO-WORDPRESS.com/wp-json/wp/v2/media",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Disposition",
+              "value": "=attachment; filename=\"{{ $json.name }}\""
+            },
+            {
+              "name": "Content-Type",
+              "value": "={{ $json.mimeType }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0007-4007-8007-000000000007",
+      "name": "WordPress - Subir Imagen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1500,
+        400
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "WORDPRESS_BASIC_AUTH_CRED_ID",
+          "name": "WordPress App Password"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "create",
+        "title": "={{ $('Inyectar Publicidad').first().json.titulo_h1 }}",
+        "additionalFields": {
+          "content": "={{ $('Inyectar Publicidad').first().json.contenido_html_final }}",
+          "status": "publish",
+          "featuredMedia": "={{ $json.id }}",
+          "excerpt": "={{ $('Inyectar Publicidad').first().json.meta_descripcion }}",
+          "categories": "={{ $('Inyectar Publicidad').first().json.categoria_wp_id }}",
+          "tags": "={{ $('Inyectar Publicidad').first().json.etiquetas_wp_ids }}"
+        }
+      },
+      "id": "a1b2c3d4-0008-4008-8008-000000000008",
+      "name": "WordPress - Crear Entrada",
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        400
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "WORDPRESS_CRED_ID",
+          "name": "WordPress account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "REEMPLAZAR_ID_GOOGLE_SHEET",
+          "mode": "list",
+          "cachedResultName": "AXIS - Cola Editorial"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Temas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Inyectar Publicidad').first().json.sheet_row_id }}",
+            "estado": "publicado",
+            "fecha_publicacion": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}",
+            "url_post": "={{ $json.link }}",
+            "wp_post_id": "={{ $json.id }}",
+            "notas": "=Publicado automáticamente | H1: {{ $('Inyectar Publicidad').first().json.titulo_h1 }}"
+          },
+          "matchingColumns": [
+            "id"
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0009-4009-8009-000000000009",
+      "name": "Marcar Tema como Publicado",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1940,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEETS_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger Diario": {
+      "main": [
+        [
+          {
+            "node": "Leer Tema Pendiente (Sheets)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Tema Pendiente (Sheets)": {
+      "main": [
+        [
+          {
+            "node": "Ollama - Estrategia SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - Estrategia SEO": {
+      "main": [
+        [
+          {
+            "node": "Ollama - Redactor Contenido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - Redactor Contenido": {
+      "main": [
+        [
+          {
+            "node": "Inyectar Publicidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inyectar Publicidad": {
+      "main": [
+        [
+          {
+            "node": "Buscar Imagen en Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Imagen en Drive": {
+      "main": [
+        [
+          {
+            "node": "WordPress - Subir Imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WordPress - Subir Imagen": {
+      "main": [
+        [
+          {
+            "node": "WordPress - Crear Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WordPress - Crear Entrada": {
+      "main": [
+        [
+          {
+            "node": "Marcar Tema como Publicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar Tema como Publicado": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all",
+    "timezone": "America/Mexico_City"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "SEO"
+    },
+    {
+      "name": "Ollama"
+    },
+    {
+      "name": "WordPress"
+    },
+    {
+      "name": "Sheets"
+    }
+  ]
+}

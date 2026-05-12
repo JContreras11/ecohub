@@ -1,0 +1,92 @@
+{
+  "Index": {
+    "badge": "Código Abierto · Solarpunk · Web3",
+    "title_part1": "El GitHub",
+    "title_part2": "de la Ecología",
+    "subtitle": "Publica proyectos ecológicos. Financia metas reales. Rastrea cada contribución en la blockchain. Construyamos juntos un futuro regenerativo.",
+    "cta_create": "Publicar un Proyecto",
+    "cta_explore": "Explorar Proyectos"
+  },
+  "Navigation": {
+    "projects": "Explorar",
+    "create": "Publicar Proyecto",
+    "profile": "Perfil",
+    "language": "Idioma"
+  },
+  "NoticeModal": {
+    "title": "Aviso a los Usuarios",
+    "p1": "{brand} es software experimental de código abierto para coordinar financiamiento ecológico en la blockchain.",
+    "p2": "No es un producto de inversión ni un servicio de gestión de activos, y no ofrece participación en beneficios ni resultados garantizados. Los tokens se usan para participar en la coordinación del protocolo y el financiamiento de proyectos bajo reglas predefinidas.",
+    "p3": "Los contratos inteligentes pueden cambiar o fallar, y la disponibilidad/precios de los tokens pueden fluctuar — podrías perder fondos. Úsalo solo si entiendes estos riesgos.",
+    "p4": "Nada aquí es consejo financiero, de inversión, fiscal o legal. Al continuar, reconoces que estás interactuando con software descentralizado — no con un intermediario.",
+    "accept": "Reconocer y Aceptar"
+  },
+  "Footer": {
+    "built_with": "Hecho con 🌿 por la comunidad de {brand}",
+    "open_source": "Código Abierto"
+  },
+  "Profile": {
+    "kicker": "Identidad wallet-first",
+    "empty_title": "Lleva tu reputación regenerativa on-chain.",
+    "empty_body": "Conecta la wallet que usas para crear proyectos, ver tu perfil público y escanear tu historial de contribuciones en vivo.",
+    "empty_card_badge": "Perfil público",
+    "empty_card_label": "Wallet conectada",
+    "empty_card_heading": "Ve tu grafo de creador",
+    "empty_card_copy": "Revisa los proyectos que creaste, los hitos que apoyaste y el perfil que acompaña a tu wallet en toda la app.",
+    "fallback_name": "Constructor regenerativo",
+    "default_bio": "Agrega una bio pública corta para que backers y validadores entiendan el trabajo que lideras.",
+    "verified_badge": "Wallet verificada",
+    "stats": {
+      "created": "proyectos creados",
+      "contributions": "contribuciones",
+      "raised": "recaudado"
+    },
+    "new_project": "Nuevo proyecto",
+    "edit_profile": "Editar perfil",
+    "wallet_status": "Estado de la wallet",
+    "tabs": {
+      "created": "Proyectos creados",
+      "contributions": "Contribuciones"
+    },
+    "created_kicker": "Proyectos que lideras",
+    "items": "items",
+    "loading": "Cargando datos del perfil...",
+    "load_error": "No pudimos cargar tu perfil en este momento.",
+    "created_empty_title": "Todavía no publicas proyectos",
+    "created_empty_body": "Cuando publiques un proyecto, aparecerá aquí con su progreso de financiamiento en vivo.",
+    "contributions_kicker": "Historial de apoyo en vivo",
+    "backed_total": "total aportado",
+    "loading_contributions": "Escaneando contribuciones on-chain...",
+    "contributions_error": "No pudimos cargar tu historial de contribuciones.",
+    "contribution_stage": "Etapa {stage}",
+    "project_link_hint": "Abrir detalle del proyecto",
+    "contributions_empty_title": "Aún no hay contribuciones",
+    "contributions_empty_body": "Cuando esta wallet financie un proyecto, la actividad aparecerá aquí con un enlace al detalle.",
+    "wallet_summary": "Resumen de la wallet",
+    "ens_missing": "No se detectó un nombre ENS",
+    "activity_kicker": "Pulso de actividad",
+    "activity_title": "Lo que esta wallet ya movió",
+    "activity_created": "Creó {count, plural, one {# proyecto} other {# proyectos}} en el ecosistema.",
+    "activity_backed": "Apoyó {count, plural, one {# hito} other {# hitos}} con contribuciones on-chain.",
+    "activity_profile": "Actualiza tus campos públicos para que validadores y backers reconozcan tu trabajo más rápido.",
+    "unsupported_network": "Cambia a una red configurada para leer contribuciones en vivo.",
+    "edit_description": "Actualiza la información pública asociada a esta wallet. Estos campos aparecen en tu encabezado de perfil.",
+    "fields": {
+      "display_name": "Nombre visible",
+      "avatar_url": "URL del avatar",
+      "bio": "Bio"
+    },
+    "placeholders": {
+      "display_name": "ej. Coastal Regen Lab",
+      "avatar_url": "https://example.com/avatar.png",
+      "bio": "¿Qué trabajo ecológico estás construyendo?"
+    },
+    "bio_hint": "Máximo 280 caracteres.",
+    "cancel": "Cancelar",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "save_success": "Perfil actualizado.",
+    "save_error": "No pudimos guardar tu perfil en este momento.",
+    "discard_confirm": "¿Descartar los cambios sin guardar?"
+  }
+}

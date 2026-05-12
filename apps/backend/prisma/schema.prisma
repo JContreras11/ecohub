@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Project {
+  id               Int      @id @default(autoincrement())
+  onChainId        Int?     @unique @map("on_chain_id")           // Matches the uint256 ID from the smart contract
+  ownerAddress     String   @map("owner_address")                 // Wallet address of the creator
+  metadataCid      String   @map("metadata_cid")                  // IPFS CID of project metadata JSON
+  imageCid         String?  @map("image_cid")                     // IPFS CID of cover image
+  title            String
+  description      String   @db.Text
+  readme           String?  @db.Text                              // Full README/markdown content
+  fundingGoal      String   @map("funding_goal")                  // Stored as string to avoid BigInt issues (USDC in base units)
+  totalFunded      String   @default("0") @map("total_funded")
+  currentStage     Int      @default(0) @map("current_stage")
+  tags             String[]
+  active           Boolean  @default(true)
+  txHash           String?  @map("tx_hash")                       // Creation transaction hash
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  contributions    Contribution[]
+
+  @@map("projects")
+}
+
+model Contribution {
+  id               Int      @id @default(autoincrement())
+  projectId        Int      @map("project_id")
+  contributorAddress String @map("contributor_address")
+  amount           String                                         // USDC in base units (string to avoid BigInt)
+  txHash           String?  @map("tx_hash")
+  blockNumber      Int?     @map("block_number")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  project          Project  @relation(fields: [projectId], references: [id])
+
+  @@map("contributions")
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  walletAddress    String   @unique @map("wallet_address")
+  displayName      String?  @map("display_name")
+  avatarUrl        String?  @map("avatar_url")
+  bio              String?  @db.Text
+  twitterHandle    String?  @map("twitter_handle")
+  githubHandle     String?  @map("github_handle")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}

@@ -1,0 +1,92 @@
+services:
+  # ── PostgreSQL Database ────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: ecohub_db_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ecohub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ecohub_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-ecohub_db}
+    volumes:
+      - ecohub_pgdata_dev:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # ── Backend API (Hot Reloading) ───────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: ecohub_backend_dev
+    working_dir: /app
+    # Montamos todo el monorepo para que Node.js detecte los cambios en tiempo real
+    volumes:
+      - ./:/app
+      - ecohub_pnpm_store_dev:/pnpm/store
+      - ecohub_node_modules_dev:/app/node_modules
+      - ecohub_backend_node_modules_dev:/app/apps/backend/node_modules
+      - ecohub_frontend_node_modules_dev:/app/apps/frontend/node_modules
+    command: sh -c "corepack enable && pnpm --filter @ecohub/backend generate && pnpm --filter @ecohub/backend migrate && pnpm --filter @ecohub/backend dev"
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-ecohub}:${POSTGRES_PASSWORD:-ecohub_dev_password}@db:5432/${POSTGRES_DB:-ecohub_db}"
+      BACKEND_PORT: "4000"
+      FRONTEND_URL: "http://localhost:3000"
+      NODE_ENV: development
+      PINATA_JWT: ${PINATA_JWT}
+      PINATA_GATEWAY_DOMAIN: ${PINATA_GATEWAY_DOMAIN}
+      PINATA_GATEWAY_URL: ${PINATA_GATEWAY_URL}
+      PINATA_API_KEY: ${PINATA_API_KEY}
+      PINATA_API_KEY_SECRET: ${PINATA_API_KEY_SECRET}
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
+      RPC_URL_SEPOLIA: ${RPC_URL_SEPOLIA}
+      RPC_URL_AMOY: ${RPC_URL_AMOY}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      USDC_ADDRESS: ${USDC_ADDRESS}
+    depends_on:
+      db:
+        condition: service_started
+
+  # ── Frontend Next.js (Hot Reloading) ──────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: ecohub_frontend_dev
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ecohub_pnpm_store_dev:/pnpm/store
+      - ecohub_node_modules_dev:/app/node_modules
+      - ecohub_backend_node_modules_dev:/app/apps/backend/node_modules
+      - ecohub_frontend_node_modules_dev:/app/apps/frontend/node_modules
+    command: sh -c "corepack enable && pnpm --filter @ecohub/frontend dev"
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      BACKEND_INTERNAL_URL: "http://backend:4000"
+      NEXT_PUBLIC_BACKEND_URL: "http://localhost:4000"
+      NEXT_PUBLIC_CHAIN_ID: ${NEXT_PUBLIC_CHAIN_ID:-11155111}
+      NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: ${NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID}
+      NEXT_PUBLIC_CONTRACT_ADDRESS: ${NEXT_PUBLIC_CONTRACT_ADDRESS}
+      NEXT_PUBLIC_PINATA_GATEWAY: ${NEXT_PUBLIC_PINATA_GATEWAY:-https://gateway.pinata.cloud/ipfs}
+      # Opcional: Para evitar que next se congele dentro de docker con demasiados archivos
+      WATCHPACK_POLLING: "true"
+    depends_on:
+      backend:
+        condition: service_started
+
+volumes:
+  ecohub_pgdata_dev:
+    driver: local
+  ecohub_pnpm_store_dev:
+    driver: local
+  ecohub_node_modules_dev:
+    driver: local
+  ecohub_backend_node_modules_dev:
+    driver: local
+  ecohub_frontend_node_modules_dev:
+    driver: local

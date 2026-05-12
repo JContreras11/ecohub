@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build and Next.js
+.next/
+dist/
+build/
+.turbo/
+apps/backend/src/generated/
+
+# Environment Variables (Strictly ignored)
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Blockchain Infrastructure (Security)
+artifacts/
+cache/
+typechain-types/
+deployments/
+keys/
+secrets/
+wallets/
+*.privateKey
+
+# Agents and AI tools
+.agent/
+.agents/
+.claude/
+.codex/
+.gemini/
+.cursor/
+.planning/
+
+# Testing and Coverage
+coverage/
+test-results/
+
+# IDEs and Misc
+.vscode/
+.DS_Store
+*.log
+scratch/

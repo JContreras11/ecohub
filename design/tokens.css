@@ -1,0 +1,231 @@
+/* EcoHub — Solarpunk × Web3 dApp Tokens
+   Manifesto: grotesk industrial, contraste alto, italic dramático en momentos clave.
+   Less editorial-magazine, more on-chain dApp. */
+:root {
+  /* === Color Palette (boosted contrast) === */
+  /* Verdant — primary forest greens, deeper + more saturated */
+  --verdant-50:  oklch(0.97 0.025 145);
+  --verdant-100: oklch(0.92 0.05 145);
+  --verdant-200: oklch(0.84 0.09 145);
+  --verdant-300: oklch(0.74 0.13 145);
+  --verdant-400: oklch(0.62 0.16 145);
+  --verdant-500: oklch(0.50 0.17 145);  /* primary — más vivo */
+  --verdant-600: oklch(0.40 0.15 145);
+  --verdant-700: oklch(0.30 0.11 145);
+  --verdant-800: oklch(0.22 0.08 145);
+  --verdant-900: oklch(0.14 0.05 145);
+  --verdant-950: oklch(0.08 0.03 145);
+
+  /* Solar — más eléctrico, menos miel */
+  --solar-50:  oklch(0.98 0.02 90);
+  --solar-100: oklch(0.95 0.05 90);
+  --solar-200: oklch(0.90 0.10 90);
+  --solar-300: oklch(0.85 0.14 90);
+  --solar-400: oklch(0.82 0.16 88);
+  --solar-500: oklch(0.78 0.17 85);   /* accent — saturado */
+  --solar-600: oklch(0.66 0.16 78);
+  --solar-700: oklch(0.52 0.14 72);
+  --solar-800: oklch(0.38 0.11 68);
+  --solar-900: oklch(0.26 0.08 65);
+
+  /* Bio — bio-luminescent teal, más cyan eléctrico */
+  --bio-50:  oklch(0.96 0.025 195);
+  --bio-100: oklch(0.92 0.05 195);
+  --bio-200: oklch(0.85 0.10 195);
+  --bio-300: oklch(0.78 0.13 195);
+  --bio-400: oklch(0.74 0.15 195);
+  --bio-500: oklch(0.70 0.16 195);   /* accent — más eléctrico */
+  --bio-600: oklch(0.56 0.15 198);
+  --bio-700: oklch(0.42 0.12 202);
+  --bio-800: oklch(0.28 0.09 208);
+  --bio-900: oklch(0.18 0.06 212);
+
+  /* Coral — terracotta accent */
+  --coral-300: oklch(0.78 0.14 35);
+  --coral-500: oklch(0.62 0.19 32);
+  --coral-700: oklch(0.46 0.16 28);
+
+  /* Bone — fondos más fríos/limpios */
+  --bone-50:  oklch(0.99 0.003 90);
+  --bone-100: oklch(0.97 0.005 90);
+  --bone-200: oklch(0.94 0.008 90);
+  --bone-300: oklch(0.90 0.012 88);
+  --bone-400: oklch(0.84 0.015 86);
+
+  /* Earth — text/ink, más oscuro y neutro */
+  --earth-700: oklch(0.32 0.04 145);
+  --earth-800: oklch(0.20 0.03 145);
+  --earth-900: oklch(0.12 0.02 145);
+  --earth-950: oklch(0.06 0.012 145);
+
+  /* Semantic */
+  --bg:        var(--bone-100);
+  --bg-elev:   var(--bone-50);
+  --surface:   var(--bone-200);
+  --ink:       var(--earth-900);
+  --ink-soft:  var(--earth-700);
+  --primary:   var(--verdant-500);
+  --primary-ink: var(--bone-50);
+  --accent:    var(--solar-500);
+  --bio:       var(--bio-500);
+  --line:      oklch(0.85 0.02 145 / 0.5);
+  --line-strong: oklch(0.20 0.03 145 / 0.18);
+
+  /* === Typography — grotesk industrial Web3, NO serif/italic moves ===
+     Söhne is proprietary; we use a credible free stack with same rhythm:
+     Inter Display (display) + Inter (body). All emphasis is via *color* +
+     weight, never italic or serif. Geist Mono for on-chain numerics. */
+  --font-display: "Inter Display", "Inter", "Söhne", "Neue Haas Grotesk", "Helvetica Neue", system-ui, sans-serif;
+  --font-body:    "Inter", "Söhne", "Neue Haas Grotesk", "Helvetica Neue", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+
+  /* === Radii — más industrial, menos orgánico === */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-2xl: 28px;
+  --r-organic: 64% 36% 58% 42% / 52% 60% 40% 48%;
+
+  /* === Shadows — más definidos, con tinte === */
+  --shadow-leaf: 0 1px 2px oklch(0.12 0.02 145 / 0.08), 0 6px 18px oklch(0.12 0.02 145 / 0.10);
+  --shadow-bloom: 0 2px 8px oklch(0.12 0.02 145 / 0.10), 0 20px 56px oklch(0.12 0.02 145 / 0.18);
+  --shadow-glow-bio: 0 0 0 1px oklch(0.70 0.16 195 / 0.4), 0 8px 32px oklch(0.70 0.16 195 / 0.35);
+  --shadow-glow-solar: 0 0 0 1px oklch(0.78 0.17 85 / 0.4), 0 8px 32px oklch(0.78 0.17 85 / 0.4);
+  --shadow-glow-verdant: 0 0 0 1px oklch(0.50 0.17 145 / 0.4), 0 8px 32px oklch(0.50 0.17 145 / 0.35);
+
+  /* Spacing scale (4-based) */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-8: 32px;  --s-10: 40px;
+  --s-12: 48px; --s-16: 64px; --s-20: 80px; --s-24: 96px;
+  --s-32: 128px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "ss02", "cv11";
+}
+
+/* Display headings — grotesk tight tracking, weight 600/700 default */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+/* Emphasis flourish — NO italic/serif. Same grotesk, lighter weight + accent color. */
+.display-italic {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01", "ss02", "zero";
+}
+
+/* === Web3 / dApp moves === */
+
+/* Frosted-light card — para hero overlays */
+.glass-leaf {
+  background: linear-gradient(135deg,
+    oklch(0.99 0.005 90 / 0.82),
+    oklch(0.94 0.012 90 / 0.65));
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.6);
+  box-shadow: var(--shadow-leaf);
+}
+
+/* Dark glass — para paneles tipo wallet/tx */
+.glass-deep {
+  background: linear-gradient(135deg,
+    oklch(0.10 0.02 145 / 0.7),
+    oklch(0.15 0.04 195 / 0.5));
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.12);
+}
+
+/* Hairline borders (Web3 staple) */
+.hairline { border: 1px solid var(--line-strong); }
+.hairline-soft { border: 1px solid var(--line); }
+
+/* Mono caption pattern — UPPERCASE TRACKED OUT */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Tx hash chip — common in dApps */
+.tx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  background: oklch(0.10 0.02 145 / 0.06);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.organic-shape { border-radius: var(--r-organic); }
+
+/* === Animations (kept from solarpunk soul) === */
+@keyframes drift-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes drift-x {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(8px); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+@keyframes leaf-float {
+  0% { transform: translate(0,0) rotate(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate(var(--lx, 200px), var(--ly, -300px)) rotate(var(--lr, 360deg)); opacity: 0; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.70 0.16 195 / 0.5); }
+  50% { box-shadow: 0 0 0 18px oklch(0.70 0.16 195 / 0); }
+}
+@keyframes shimmer-line {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.drift-y { animation: drift-y 8s ease-in-out infinite; }
+.drift-y-slow { animation: drift-y 14s ease-in-out infinite; }
+.sway { animation: sway 6s ease-in-out infinite; transform-origin: bottom center; }
+.pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
+
+::selection { background: var(--solar-300); color: var(--earth-900); }
+
+button { font-family: inherit; cursor: pointer; }
+
+.scrollarea::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollarea::-webkit-scrollbar-thumb { background: var(--verdant-300); border-radius: 8px; }
+.scrollarea::-webkit-scrollbar-track { background: transparent; }

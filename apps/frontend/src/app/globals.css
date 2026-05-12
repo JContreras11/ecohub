@@ -1,0 +1,528 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== :root — Light mode tokens ===== */
+:root {
+  color-scheme: light dark;
+
+  /* === Color Palette === */
+
+  /* Verdant — primary forest greens */
+  --verdant-50:  oklch(0.97 0.025 145);
+  --verdant-100: oklch(0.92 0.05 145);
+  --verdant-200: oklch(0.84 0.09 145);
+  --verdant-300: oklch(0.74 0.13 145);
+  --verdant-400: oklch(0.62 0.16 145);
+  --verdant-500: oklch(0.50 0.17 145);
+  --verdant-600: oklch(0.40 0.15 145);
+  --verdant-700: oklch(0.30 0.11 145);
+  --verdant-800: oklch(0.22 0.08 145);
+  --verdant-900: oklch(0.14 0.05 145);
+  --verdant-950: oklch(0.08 0.03 145);
+
+  /* Solar — electric amber */
+  --solar-50:  oklch(0.98 0.02 90);
+  --solar-100: oklch(0.95 0.05 90);
+  --solar-200: oklch(0.90 0.10 90);
+  --solar-300: oklch(0.85 0.14 90);
+  --solar-400: oklch(0.82 0.16 88);
+  --solar-500: oklch(0.78 0.17 85);
+  --solar-600: oklch(0.66 0.16 78);
+  --solar-700: oklch(0.52 0.14 72);
+  --solar-800: oklch(0.38 0.11 68);
+  --solar-900: oklch(0.26 0.08 65);
+
+  /* Bio — bioluminescent teal */
+  --bio-50:  oklch(0.96 0.025 195);
+  --bio-100: oklch(0.92 0.05 195);
+  --bio-200: oklch(0.85 0.10 195);
+  --bio-300: oklch(0.78 0.13 195);
+  --bio-400: oklch(0.74 0.15 195);
+  --bio-500: oklch(0.70 0.16 195);
+  --bio-600: oklch(0.56 0.15 198);
+  --bio-700: oklch(0.42 0.12 202);
+  --bio-800: oklch(0.28 0.09 208);
+  --bio-900: oklch(0.18 0.06 212);
+
+  /* Coral — terracotta accent */
+  --coral-300: oklch(0.78 0.14 35);
+  --coral-500: oklch(0.62 0.19 32);
+  --coral-700: oklch(0.46 0.16 28);
+
+  /* Bone — cool/clean backgrounds */
+  --bone-50:  oklch(0.99 0.003 90);
+  --bone-100: oklch(0.97 0.005 90);
+  --bone-200: oklch(0.94 0.008 90);
+  --bone-300: oklch(0.90 0.012 88);
+  --bone-400: oklch(0.84 0.015 86);
+
+  /* Earth — text/ink, dark + neutral */
+  --earth-700: oklch(0.32 0.04 145);
+  --earth-800: oklch(0.20 0.03 145);
+  --earth-900: oklch(0.12 0.02 145);
+  --earth-950: oklch(0.06 0.012 145);
+
+  /* === Semantic tokens === */
+  --bg:          var(--bone-100);
+  --bg-elev:     var(--bone-50);
+  --surface:     var(--bone-200);
+  --ink:         var(--earth-900);
+  --ink-soft:    var(--earth-700);
+  --primary:     var(--verdant-500);
+  --primary-ink: var(--bone-50);
+  --accent:      var(--solar-500);
+  --bio:         var(--bio-500);
+  --line:        oklch(0.85 0.02 145 / 0.5);
+  --line-strong: oklch(0.20 0.03 145 / 0.18);
+
+  /* === Typography — chained to next/font === */
+  --font-display: var(--font-inter-display), "Inter Display", "Inter", "Söhne", "Neue Haas Grotesk", "Helvetica Neue", system-ui, sans-serif;
+  --font-body:    var(--font-inter), "Inter", "Söhne", "Neue Haas Grotesk", "Helvetica Neue", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+
+  /* === Radii === */
+  --r-sm:      4px;
+  --r-md:      8px;
+  --r-lg:      14px;
+  --r-xl:      20px;
+  --r-2xl:     28px;
+  --r-organic: 64% 36% 58% 42% / 52% 60% 40% 48%;
+
+  /* === Shadows === */
+  --shadow-leaf:
+    0 1px 2px oklch(0.12 0.02 145 / 0.08),
+    0 6px 18px oklch(0.12 0.02 145 / 0.10);
+  --shadow-bloom:
+    0 2px 8px oklch(0.12 0.02 145 / 0.10),
+    0 20px 56px oklch(0.12 0.02 145 / 0.18);
+  --shadow-glow-bio:
+    0 0 0 1px oklch(0.70 0.16 195 / 0.4),
+    0 8px 32px oklch(0.70 0.16 195 / 0.35);
+  --shadow-glow-solar:
+    0 0 0 1px oklch(0.78 0.17 85 / 0.4),
+    0 8px 32px oklch(0.78 0.17 85 / 0.4);
+  --shadow-glow-verdant:
+    0 0 0 1px oklch(0.50 0.17 145 / 0.4),
+    0 8px 32px oklch(0.50 0.17 145 / 0.35);
+
+  /* === Spacing scale (4-based) === */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  20px;
+  --s-6:  24px;
+  --s-8:  32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+  --s-24: 96px;
+  --s-32: 128px;
+
+  /* === shadcn-compatible aliases (Phase 2: shadcn/ui Primitives) === */
+  --background:            var(--bg);
+  --foreground:            var(--ink);
+  --card:                  var(--bg-elev);
+  --card-foreground:       var(--ink);
+  --popover:               var(--bg-elev);
+  --popover-foreground:    var(--ink);
+  --primary-foreground:    var(--primary-ink);
+  --secondary:             var(--surface);
+  --secondary-foreground:  var(--ink);
+  --muted:                 var(--surface);
+  --muted-foreground:      var(--ink-soft);
+  --accent-foreground:     var(--earth-900);
+  --destructive:           var(--coral-500);
+  --destructive-foreground: var(--bone-50);
+  --border:                var(--line-strong);
+  --input:                 var(--line-strong);
+  --ring:                  var(--verdant-500);
+  --radius:                var(--r-lg);
+}
+
+/* ===== .dark — Dark mode overrides ===== */
+.dark {
+  /* === Surfaces === */
+  --bg:        oklch(0.14 0.02 165);
+  --bg-elev:   oklch(0.18 0.025 165);
+  --surface:   oklch(0.22 0.03 165);
+
+  /* Bone tokens repurposed as dark elevations */
+  --bone-50:  oklch(0.18 0.025 165);
+  --bone-100: oklch(0.22 0.03 165);
+  --bone-200: oklch(0.26 0.035 165);
+  --bone-300: oklch(0.32 0.04 165);
+  --bone-400: oklch(0.40 0.045 165);
+
+  /* === Ink (text) === */
+  --ink:      oklch(0.97 0.005 90);
+  --ink-soft: oklch(0.78 0.012 95);
+
+  /* Earth scale flipped — text needs brightest values */
+  --earth-700: oklch(0.78 0.012 95);
+  --earth-800: oklch(0.88 0.008 95);
+  --earth-900: oklch(0.97 0.005 90);
+  --earth-950: oklch(1.00 0 0);
+
+  /* === Verdant — shifted for dark backgrounds === */
+  --verdant-50:  oklch(0.20 0.04 145);
+  --verdant-100: oklch(0.24 0.06 145);
+  --verdant-200: oklch(0.30 0.08 145);
+  --verdant-300: oklch(0.45 0.13 145);
+  --verdant-400: oklch(0.62 0.16 145);
+  --verdant-500: oklch(0.74 0.18 150);
+  --verdant-600: oklch(0.82 0.20 150);
+  --verdant-700: oklch(0.88 0.18 150);
+  --verdant-800: oklch(0.92 0.14 150);
+  --verdant-900: oklch(0.95 0.08 150);
+  --verdant-950: oklch(0.98 0.04 150);
+
+  /* === Solar === */
+  --solar-50:  oklch(0.22 0.04 80);
+  --solar-100: oklch(0.28 0.06 82);
+  --solar-200: oklch(0.36 0.10 84);
+  --solar-300: oklch(0.86 0.16 88);
+  --solar-400: oklch(0.84 0.17 86);
+  --solar-500: oklch(0.82 0.18 84);
+  --solar-600: oklch(0.78 0.18 82);
+  --solar-700: oklch(0.72 0.17 80);
+  --solar-800: oklch(0.62 0.15 76);
+  --solar-900: oklch(0.50 0.12 72);
+
+  /* === Bio — electric on dark === */
+  --bio-50:  oklch(0.20 0.04 198);
+  --bio-100: oklch(0.26 0.06 198);
+  --bio-200: oklch(0.32 0.10 198);
+  --bio-300: oklch(0.82 0.14 195);
+  --bio-400: oklch(0.78 0.16 195);
+  --bio-500: oklch(0.74 0.17 195);
+  --bio-600: oklch(0.68 0.17 197);
+  --bio-700: oklch(0.58 0.15 200);
+  --bio-800: oklch(0.42 0.12 204);
+  --bio-900: oklch(0.30 0.09 208);
+
+  /* === Coral === */
+  --coral-300: oklch(0.78 0.16 35);
+  --coral-500: oklch(0.72 0.20 32);
+  --coral-700: oklch(0.62 0.18 28);
+
+  /* === Lines === */
+  --line:        oklch(0.99 0.005 90 / 0.10);
+  --line-strong: oklch(0.99 0.005 90 / 0.18);
+
+  /* === Semantic === */
+  --primary:     var(--verdant-500);
+  --primary-ink: oklch(0.10 0.02 145);
+  --accent:      var(--solar-500);
+  --bio:         var(--bio-500);
+
+  /* === Shadows — luminous glows for dark surfaces === */
+  --shadow-leaf:
+    0 1px 2px oklch(0 0 0 / 0.5),
+    0 6px 18px oklch(0 0 0 / 0.4);
+  --shadow-bloom:
+    0 2px 8px oklch(0 0 0 / 0.6),
+    0 20px 56px oklch(0 0 0 / 0.5);
+  --shadow-glow-bio:
+    0 0 0 1px oklch(0.74 0.17 195 / 0.5),
+    0 10px 40px oklch(0.74 0.17 195 / 0.45);
+  --shadow-glow-solar:
+    0 0 0 1px oklch(0.82 0.18 84 / 0.5),
+    0 10px 40px oklch(0.82 0.18 84 / 0.5);
+  --shadow-glow-verdant:
+    0 0 0 1px oklch(0.74 0.18 150 / 0.5),
+    0 10px 40px oklch(0.74 0.18 150 / 0.45);
+
+  /* === shadcn aliases — explicit re-bind for clarity + debuggability === */
+  --background:  var(--bg);
+  --foreground:  var(--ink);
+  --border:      var(--line-strong);
+  --ring:        var(--verdant-500);
+}
+
+/* ===== Base resets ===== */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "ss02", "cv11";
+  min-height: 100vh;
+}
+
+html.dark {
+  background: var(--bg);
+}
+
+html.dark body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--solar-300);
+  color: var(--earth-900);
+}
+
+.dark ::selection {
+  background: var(--solar-500);
+  color: oklch(0.10 0.02 145);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ===== Global custom scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--verdant-300);
+  border-radius: var(--r-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--verdant-400);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: oklch(0.99 0.005 90 / 0.18);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.99 0.005 90 / 0.28);
+}
+
+/* Firefox */
+html {
+  scrollbar-color: var(--verdant-300) transparent;
+  scrollbar-width: thin;
+}
+
+html.dark {
+  scrollbar-color: oklch(0.99 0.005 90 / 0.18) transparent;
+}
+
+/* ===== Typography utilities ===== */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.display-italic {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01", "ss02", "zero";
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ===== Glass + dApp utilities ===== */
+
+/* Frosted-light card — hero overlays (light mode) */
+.glass-leaf {
+  background: linear-gradient(135deg,
+    oklch(0.99 0.005 90 / 0.82),
+    oklch(0.94 0.012 90 / 0.65));
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.6);
+  box-shadow: var(--shadow-leaf);
+}
+
+/* Dark glass — wallet/tx panels (light mode default) */
+.glass-deep {
+  background: linear-gradient(135deg,
+    oklch(0.10 0.02 145 / 0.7),
+    oklch(0.15 0.04 195 / 0.5));
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.12);
+}
+
+/* Dark mode glass overrides */
+.dark .glass-leaf {
+  background: linear-gradient(135deg,
+    oklch(0.22 0.03 165 / 0.7),
+    oklch(0.18 0.04 195 / 0.55));
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.10);
+}
+
+.dark .glass-deep {
+  background: linear-gradient(135deg,
+    oklch(0.10 0.025 165 / 0.85),
+    oklch(0.14 0.035 195 / 0.7));
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.14);
+}
+
+/* Hairline borders (Web3 staple) */
+.hairline {
+  border: 1px solid var(--line-strong);
+}
+
+.hairline-soft {
+  border: 1px solid var(--line);
+}
+
+/* Tx hash chip — common in dApps */
+.tx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  background: oklch(0.10 0.02 145 / 0.06);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.dark .tx-chip {
+  background: oklch(0.99 0.005 90 / 0.06);
+  border-color: oklch(0.99 0.005 90 / 0.14);
+}
+
+.organic-shape {
+  border-radius: var(--r-organic);
+}
+
+/* ===== Animations (keyframes only — Tailwind animation utilities live in tailwind.config.js) ===== */
+
+@keyframes drift-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes drift-x {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(8px); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50%       { transform: rotate(1.5deg); }
+}
+
+@keyframes leaf-float {
+  0%   { transform: translate(0, 0) rotate(0); opacity: 0; }
+  10%  { opacity: 1; }
+  100% {
+    transform: translate(var(--lx, 200px), var(--ly, -300px)) rotate(var(--lr, 360deg));
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.70 0.16 195 / 0.5); }
+  50%       { box-shadow: 0 0 0 18px oklch(0.70 0.16 195 / 0); }
+}
+
+@keyframes shimmer-line {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes ripple-out {
+  0% { width: 6px; height: 6px; opacity: 1; }
+  100% { width: 80px; height: 80px; opacity: 0; }
+}
+
+@keyframes dot-fade {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) translateY(20px); }
+}
+
+@keyframes eh-aurora-hue {
+  to { filter: hue-rotate(360deg); }
+}
+
+@keyframes eh-aurora-path-1 {
+  0%   { top: 12%;  left: 50%; }
+  25%  { top: 22%;  left: 8%;  }
+  50%  { top: 38%;  left: 50%; }
+  75%  { top: 18%;  left: 92%; }
+  100% { top: 12%;  left: 50%; }
+}
+
+@keyframes eh-aurora-path-2 {
+  0%   { top: 30%;  left: 92%; }
+  25%  { top: 42%;  left: 60%; }
+  50%  { top: 18%;  left: 12%; }
+  75%  { top: 8%;   left: 55%; }
+  100% { top: 30%;  left: 92%; }
+}
+
+@keyframes eh-aurora-path-3 {
+  0%   { top: 45%;  left: 50%; }
+  25%  { top: 22%;  left: 88%; }
+  50%  { top: 6%;   left: 40%; }
+  75%  { top: 28%;  left: 8%;  }
+  100% { top: 45%;  left: 50%; }
+}
+
+@keyframes eh-aurora-twinkle {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.9;  }
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

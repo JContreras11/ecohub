@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EcoHub · Dark</title>
+
+  <!-- Fonts: Inter (grotesk Söhne-style) + Geist Mono. NO serif/italic faces. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="tokens.css?v=2" />
+  <link rel="stylesheet" href="tokens-dark.css?v=2" />
+
+  <!-- React + Babel (pinned) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; background: oklch(0.10 0.02 165); }
+    body { font-family: var(--font-body); color: var(--ink); }
+    #root { width: 100vw; height: 100vh; }
+    /* Hide scrollbars inside artboards to keep the canvas tidy */
+    .dc-card::-webkit-scrollbar { width: 0; height: 0; }
+
+    /* Dark-mode overrides for the design canvas chrome */
+    #root > div[style*="background"] { background: oklch(0.10 0.02 165) !important; }
+    .dc-card { background: var(--bg) !important; }
+    .dc-editable { color: oklch(0.95 0.005 90); }
+    .dc-editable:focus { background: oklch(0.99 0.005 90 / 0.08) !important; box-shadow: 0 0 0 1.5px var(--solar-500) !important; }
+  </style>
+
+  <template id="__bundler_thumbnail">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#3a8c5e"/><stop offset="1" stop-color="#e0b340"/>
+        </linearGradient>
+      </defs>
+      <rect width="100" height="100" fill="url(#g)"/>
+      <g fill="#f6f3ec" transform="translate(30 26)">
+        <path d="M20 0 C 32 8 40 18 40 32 C 40 42 32 50 20 50 C 8 50 0 42 0 32 C 0 18 8 8 20 0 Z"/>
+        <path d="M20 4 L 20 50" stroke="#3a8c5e" stroke-width="1.5" fill="none"/>
+      </g>
+    </svg>
+  </template>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Component scripts (order matters — each exports to window) -->
+  <script type="text/babel" src="data.jsx"></script>
+  <script type="text/babel" src="logo.jsx"></script>
+  <script type="text/babel" src="effects.jsx"></script>
+  <script type="text/babel" src="ui.jsx"></script>
+  <script type="text/babel" src="nav.jsx"></script>
+
+  <script type="text/babel" src="page-landing.jsx"></script>
+  <script type="text/babel" src="page-create.jsx"></script>
+  <script type="text/babel" src="page-profile.jsx"></script>
+  <script type="text/babel" src="page-project.jsx"></script>
+  <script type="text/babel" src="page-about.jsx"></script>
+  <script type="text/babel" src="page-system.jsx"></script>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+
+  <script type="text/babel">
+    /* App — wires all 6 pages into a Figma-style design canvas.
+       Each artboard renders a full page with cross-page nav wired through onNav,
+       which (inside an artboard) just scrolls the artboard up to make sense.
+       Click any artboard's expand button or label to enter focus mode. */
+
+    const { useEffect } = React;
+
+    // A simple, scoped page wrapper: each page is a 1440-wide artboard, and we
+    // give each its own router-less navigation closure. onNav("x") doesn't
+    // jump artboards (which would defeat the canvas presentation) — it just
+    // scrolls the current artboard to top so the demo stays predictable.
+    const PageFrame = ({ children }) => {
+      const ref = React.useRef(null);
+      const onNav = (key) => {
+        if (ref.current) ref.current.scrollTop = 0;
+      };
+      // Inject onNav into the single child element
+      const child = React.cloneElement(React.Children.only(children), { onNav });
+      return (
+        <div ref={ref} style={{
+          width: "100%", height: "100%", overflow: "auto",
+          background: "var(--bg)",
+        }}>
+          {child}
+        </div>
+      );
+    };
+
+    const App = () => (
+      <DesignCanvas minScale={0.05} maxScale={3}>
+        <DCSection
+          id="ecohub"
+          title="EcoHub — Solarpunk Regenerative Platform"
+          subtitle="A cooperative for makers, funders, and validators of ecological projects · 6 hi-fi pages + design system"
+        >
+          <DCArtboard id="landing" label="01 · Landing" width={1440} height={3600}>
+            <PageFrame><window.EcoLanding /></PageFrame>
+          </DCArtboard>
+
+          <DCArtboard id="about" label="02 · About / Manifesto" width={1440} height={3400}>
+            <PageFrame><window.EcoAbout /></PageFrame>
+          </DCArtboard>
+
+          <DCArtboard id="profile" label="03 · Maker Profile" width={1440} height={2400}>
+            <PageFrame><window.EcoProfile /></PageFrame>
+          </DCArtboard>
+
+          <DCArtboard id="project" label="04 · Project Detail" width={1440} height={3200}>
+            <PageFrame><window.EcoProject /></PageFrame>
+          </DCArtboard>
+
+          <DCArtboard id="create" label="05 · Plant a Project" width={1440} height={2400}>
+            <PageFrame><window.EcoCreate /></PageFrame>
+          </DCArtboard>
+
+          <DCArtboard id="system" label="06 · Design System (Tailwind)" width={1440} height={5400}>
+            <PageFrame><window.EcoSystem /></PageFrame>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+    );
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

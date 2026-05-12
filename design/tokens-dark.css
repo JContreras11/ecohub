@@ -1,0 +1,141 @@
+/* EcoHub Dark — overrides on top of tokens.css.
+   Strategy: keep the verdant/solar/bio scales (they read fine on dark),
+   only flip the SEMANTIC tokens (bg, surface, ink, line, shadows, glass).
+   This way every component that uses var(--bg) / var(--ink) / etc. just
+   re-themes for free — no per-component edits needed. */
+
+:root {
+  /* ===== Surfaces ===== */
+  /* Deep polar / on-chain-night base. Slight green hint to keep the brand. */
+  --bg:        oklch(0.14 0.02 165);   /* near-black with green undertone */
+  --bg-elev:   oklch(0.18 0.025 165);  /* card */
+  --surface:   oklch(0.22 0.03 165);   /* raised */
+
+  /* Bone tokens repurposed as dark elevations so any leftover use of
+     --bone-* on backgrounds in components automatically becomes dark. */
+  --bone-50:   oklch(0.18 0.025 165);  /* was lightest white */
+  --bone-100:  oklch(0.22 0.03 165);
+  --bone-200:  oklch(0.26 0.035 165);
+  --bone-300:  oklch(0.32 0.04 165);
+  --bone-400:  oklch(0.40 0.045 165);
+
+  /* ===== Ink (text) ===== */
+  --ink:       oklch(0.97 0.005 90);   /* warm off-white */
+  --ink-soft:  oklch(0.78 0.012 95);   /* muted */
+
+  /* Earth scale flipped — text needs the brightest values now */
+  --earth-700: oklch(0.78 0.012 95);
+  --earth-800: oklch(0.88 0.008 95);
+  --earth-900: oklch(0.97 0.005 90);
+  --earth-950: oklch(1.00 0 0);
+
+  /* ===== Brand scales — slightly shifted for dark backgrounds =====
+     Move primary up the lightness scale so it pops against the dark bg.
+     The lower numbers (50, 100, 200) become DARKER tints (used for chip
+     backgrounds), upper numbers (500-700) become BRIGHTER for fg. */
+
+  /* Verdant — reads on dark */
+  --verdant-50:  oklch(0.20 0.04 145);   /* dark tint, used as chip bg */
+  --verdant-100: oklch(0.24 0.06 145);
+  --verdant-200: oklch(0.30 0.08 145);
+  --verdant-300: oklch(0.45 0.13 145);
+  --verdant-400: oklch(0.62 0.16 145);
+  --verdant-500: oklch(0.74 0.18 150);   /* primary — brighter for dark */
+  --verdant-600: oklch(0.82 0.20 150);   /* used as accent text */
+  --verdant-700: oklch(0.88 0.18 150);
+  --verdant-800: oklch(0.92 0.14 150);
+  --verdant-900: oklch(0.95 0.08 150);
+  --verdant-950: oklch(0.98 0.04 150);
+
+  /* Solar */
+  --solar-50:  oklch(0.22 0.04 80);
+  --solar-100: oklch(0.28 0.06 82);
+  --solar-200: oklch(0.36 0.10 84);
+  --solar-300: oklch(0.86 0.16 88);     /* highlight gold */
+  --solar-400: oklch(0.84 0.17 86);
+  --solar-500: oklch(0.82 0.18 84);     /* accent */
+  --solar-600: oklch(0.78 0.18 82);
+  --solar-700: oklch(0.72 0.17 80);
+  --solar-800: oklch(0.62 0.15 76);
+  --solar-900: oklch(0.50 0.12 72);
+
+  /* Bio — eléctrico en dark */
+  --bio-50:  oklch(0.20 0.04 198);
+  --bio-100: oklch(0.26 0.06 198);
+  --bio-200: oklch(0.32 0.10 198);
+  --bio-300: oklch(0.82 0.14 195);
+  --bio-400: oklch(0.78 0.16 195);
+  --bio-500: oklch(0.74 0.17 195);     /* accent */
+  --bio-600: oklch(0.68 0.17 197);
+  --bio-700: oklch(0.58 0.15 200);
+  --bio-800: oklch(0.42 0.12 204);
+  --bio-900: oklch(0.30 0.09 208);
+
+  /* Coral */
+  --coral-300: oklch(0.78 0.16 35);
+  --coral-500: oklch(0.72 0.20 32);
+  --coral-700: oklch(0.62 0.18 28);
+
+  /* ===== Lines ===== */
+  --line:        oklch(0.99 0.005 90 / 0.10);
+  --line-strong: oklch(0.99 0.005 90 / 0.18);
+
+  /* ===== Semantic ===== */
+  --primary:     var(--verdant-500);
+  --primary-ink: oklch(0.10 0.02 145);
+  --accent:      var(--solar-500);
+  --bio:         var(--bio-500);
+
+  /* ===== Shadows — replaced with luminous glows for dark surfaces ===== */
+  --shadow-leaf:
+    0 1px 2px oklch(0 0 0 / 0.5),
+    0 6px 18px oklch(0 0 0 / 0.4);
+  --shadow-bloom:
+    0 2px 8px oklch(0 0 0 / 0.6),
+    0 20px 56px oklch(0 0 0 / 0.5);
+  --shadow-glow-bio:
+    0 0 0 1px oklch(0.74 0.17 195 / 0.5),
+    0 10px 40px oklch(0.74 0.17 195 / 0.45);
+  --shadow-glow-solar:
+    0 0 0 1px oklch(0.82 0.18 84 / 0.5),
+    0 10px 40px oklch(0.82 0.18 84 / 0.5);
+  --shadow-glow-verdant:
+    0 0 0 1px oklch(0.74 0.18 150 / 0.5),
+    0 10px 40px oklch(0.74 0.18 150 / 0.45);
+}
+
+/* ===== Glass surfaces re-skinned for dark ===== */
+.glass-leaf {
+  background: linear-gradient(135deg,
+    oklch(0.22 0.03 165 / 0.7),
+    oklch(0.18 0.04 195 / 0.55));
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.10);
+}
+
+.glass-deep {
+  background: linear-gradient(135deg,
+    oklch(0.10 0.025 165 / 0.85),
+    oklch(0.14 0.035 195 / 0.7));
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid oklch(0.99 0.005 90 / 0.14);
+}
+
+.tx-chip {
+  background: oklch(0.99 0.005 90 / 0.06);
+  border-color: oklch(0.99 0.005 90 / 0.14);
+  color: var(--ink);
+}
+
+::selection { background: var(--solar-500); color: oklch(0.10 0.02 145); }
+
+/* Scrollbar */
+.scrollarea::-webkit-scrollbar-thumb {
+  background: oklch(0.99 0.005 90 / 0.18);
+}
+
+/* Body explicit dark base */
+body { background: var(--bg); color: var(--ink); }
+html { background: var(--bg); }

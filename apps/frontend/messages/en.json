@@ -1,0 +1,92 @@
+{
+  "Index": {
+    "badge": "Open Source · Solarpunk · Web3",
+    "title_part1": "The GitHub",
+    "title_part2": "of Ecology",
+    "subtitle": "Publish ecological projects. Fund real-world milestones. Track every contribution on-chain. Build a regenerative future — together.",
+    "cta_create": "Publish a Project",
+    "cta_explore": "Explore Projects"
+  },
+  "Navigation": {
+    "projects": "Explore",
+    "create": "Publish Project",
+    "profile": "Profile",
+    "language": "Language"
+  },
+  "NoticeModal": {
+    "title": "Notice To Users",
+    "p1": "{brand} is open-source, experimental software for coordinating on-chain ecological funding.",
+    "p2": "It is not an investment product or asset-management service, and it does not offer profit-sharing or guaranteed outcomes. Tokens are used to participate in protocol coordination and project funding within predefined rules.",
+    "p3": "Smart contracts may change or fail, and token availability/prices can fluctuate — you may lose funds. Use only if you understand these risks.",
+    "p4": "Nothing here is financial, investment, tax, or legal advice. By proceeding, you acknowledge you're interacting with decentralised software — not an intermediary.",
+    "accept": "Acknowledge and Accept"
+  },
+  "Footer": {
+    "built_with": "Built with 🌿 by the {brand} community",
+    "open_source": "Open Source"
+  },
+  "Profile": {
+    "kicker": "Wallet-first identity",
+    "empty_title": "Bring your regenerative reputation on-chain.",
+    "empty_body": "Connect the wallet you use to create projects, view your public profile, and scan live contribution history.",
+    "empty_card_badge": "Public profile",
+    "empty_card_label": "Connected wallet",
+    "empty_card_heading": "See your maker graph",
+    "empty_card_copy": "Review the projects you created, the milestones you backed, and the profile that follows your wallet everywhere.",
+    "fallback_name": "Regenerative builder",
+    "default_bio": "Add a short public bio so backers and validators can understand the work you steward.",
+    "verified_badge": "Wallet verified",
+    "stats": {
+      "created": "projects created",
+      "contributions": "contributions",
+      "raised": "raised"
+    },
+    "new_project": "New project",
+    "edit_profile": "Edit profile",
+    "wallet_status": "Wallet status",
+    "tabs": {
+      "created": "Created Projects",
+      "contributions": "Contributions"
+    },
+    "created_kicker": "Projects you steward",
+    "items": "items",
+    "loading": "Loading profile data...",
+    "load_error": "Unable to load your profile right now.",
+    "created_empty_title": "No published projects yet",
+    "created_empty_body": "When you publish a project, it will appear here with live funding progress.",
+    "contributions_kicker": "Live support history",
+    "backed_total": "backed total",
+    "loading_contributions": "Scanning on-chain contributions...",
+    "contributions_error": "We couldn't load your contribution history.",
+    "contribution_stage": "Stage {stage}",
+    "project_link_hint": "Open project detail",
+    "contributions_empty_title": "No contributions found yet",
+    "contributions_empty_body": "Once this wallet funds a project, the activity will appear here with a link back to the project.",
+    "wallet_summary": "Wallet summary",
+    "ens_missing": "No ENS name detected",
+    "activity_kicker": "Activity pulse",
+    "activity_title": "What this wallet has moved",
+    "activity_created": "Created {count, plural, one {# project} other {# projects}} in the ecosystem.",
+    "activity_backed": "Backed {count, plural, one {# milestone} other {# milestones}} with on-chain contributions.",
+    "activity_profile": "Update your public fields so validators and backers can recognize your work faster.",
+    "unsupported_network": "Switch to a configured network to read live contributions.",
+    "edit_description": "Update the public information attached to this wallet. These fields appear in your profile header.",
+    "fields": {
+      "display_name": "Display name",
+      "avatar_url": "Avatar URL",
+      "bio": "Bio"
+    },
+    "placeholders": {
+      "display_name": "e.g. Coastal Regen Lab",
+      "avatar_url": "https://example.com/avatar.png",
+      "bio": "What ecological work are you building?"
+    },
+    "bio_hint": "Max 280 characters.",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "save_success": "Profile updated.",
+    "save_error": "Unable to save your profile right now.",
+    "discard_confirm": "Discard unsaved profile changes?"
+  }
+}

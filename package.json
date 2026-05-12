@@ -1,0 +1,36 @@
+{
+  "name": "ecohub",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.2",
+  "description": "The GitHub of Ecology — Open-source, decentralized, Solarpunk-themed crowdfunding for ecological projects",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @ecohub/frontend dev\" \"pnpm --filter @ecohub/backend dev\"",
+    "dev:frontend": "pnpm --filter @ecohub/frontend dev",
+    "dev:backend": "pnpm --filter @ecohub/backend dev",
+    "build": "pnpm --filter @ecohub/frontend build && pnpm --filter @ecohub/backend build",
+    "test": "pnpm --filter @ecohub/contracts test",
+    "contracts:compile": "pnpm --filter @ecohub/contracts compile",
+    "contracts:deploy:amoy": "pnpm --filter @ecohub/contracts deploy:amoy",
+    "contracts:deploy:sepolia": "pnpm --filter @ecohub/contracts deploy:sepolia",
+    "db:migrate": "pnpm --filter @ecohub/backend migrate",
+    "db:studio": "pnpm --filter @ecohub/backend studio",
+    "seed": "pnpm --filter @ecohub/backend seed"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "bufferutil",
+      "esbuild",
+      "keccak",
+      "prisma",
+      "secp256k1",
+      "sharp",
+      "unrs-resolver",
+      "utf-8-validate"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
