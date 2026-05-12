@@ -37,6 +37,8 @@
     "step3_desc": "Local validators attest to the real-world outcomes. Funds are trustlessly released to creators.",
     "featured_projects_title": "Featured regenerative projects",
     "featured_projects_subtitle": "Funded, tracked, and verified — on-chain.",
+    "featured_projects_empty_title": "No projects yet",
+    "featured_projects_empty_subtitle": "Be the first to publish a regenerative project.",
     "activity_title": "Every contribution grows a visible root.",
     "activity_subtitle": "No black boxes. {brand} uses public smart contracts to ensure transparency from the first dollar to the final tree planted.",
     "trait_transparent_title": "Transparent",

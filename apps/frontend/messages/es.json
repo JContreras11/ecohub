@@ -37,6 +37,8 @@
     "step3_desc": "Validadores locales atestiguan los resultados reales. Los fondos se liberan a las personas creadoras sin necesidad de confianza.",
     "featured_projects_title": "Proyectos regenerativos destacados",
     "featured_projects_subtitle": "Financiados, rastreados y verificados — on-chain.",
+    "featured_projects_empty_title": "Aún no hay proyectos",
+    "featured_projects_empty_subtitle": "Sé el primero en publicar un proyecto regenerativo.",
     "activity_title": "Cada contribución hace crecer una raíz visible.",
     "activity_subtitle": "Sin cajas negras. {brand} usa contratos inteligentes públicos para garantizar transparencia desde el primer dólar hasta el último árbol plantado.",
     "trait_transparent_title": "Transparente",

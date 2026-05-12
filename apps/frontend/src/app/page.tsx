@@ -17,97 +17,23 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const BACKEND_URL =
   process.env.BACKEND_INTERNAL_URL ||
+  process.env.BACKEND_URL ||
   process.env.NEXT_PUBLIC_BACKEND_URL ||
   "http://localhost:4000";
 
-// Fetch projects server-side
 async function getProjects() {
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/projects?limit=12`, {
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.data || [];
-  } catch {
-    // Return empty if backend is not running yet
-    return [];
+  const res = await fetch(`${BACKEND_URL}/api/projects?limit=12`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Backend fetch failed: ${res.status} ${res.statusText}`);
   }
+  const data = await res.json();
+  return data.data || [];
 }
 
-const DUMMY_PROJECTS = [
-  {
-    id: "dummy-999",
-    slug: "mycelium-network-nodes",
-    title: "Mycelium Network Nodes",
-    description: "Open-source sensors for soil fungal network monitoring.",
-    tags: ["hardware", "cascadia"],
-    fundingGoal: "50000000000",
-    totalFunded: "14500000000",
-    currentStage: 2,
-    ownerAddress: "0x1234567890abcdef1234567890abcdef12345678",
-    metadataCid: "Qm123",
-    imageCid: null,
-  },
-  {
-    id: "dummy-998",
-    slug: "solarpunk-microgrid",
-    title: "Solarpunk Microgrid",
-    description: "Community-owned solar microgrid in urban areas.",
-    tags: ["energy", "new york"],
-    fundingGoal: "120000000000",
-    totalFunded: "32000000000",
-    currentStage: 1,
-    ownerAddress: "0xabcd567890abcdef1234567890abcdef12345678",
-    metadataCid: "Qm124",
-    imageCid: null,
-  },
-  {
-    id: "dummy-997",
-    slug: "ocean-cleanup-drone",
-    title: "Ocean Cleanup Drone",
-    description: "Autonomous drone for collecting plastic waste.",
-    tags: ["hardware", "pacific"],
-    fundingGoal: "200000000000",
-    totalFunded: "85000000000",
-    currentStage: 3,
-    ownerAddress: "0x1234567890abcdef1234567890abcdef12341111",
-    metadataCid: "Qm125",
-    imageCid: null,
-  },
-  {
-    id: "dummy-996",
-    slug: "vertical-forest",
-    title: "Vertical Forest",
-    description: "Urban reforestation project using vertical architecture.",
-    tags: ["nature", "milan"],
-    fundingGoal: "500000000000",
-    totalFunded: "150000000000",
-    currentStage: 1,
-    ownerAddress: "0x1234567890abcdef1234567890abcdef12342222",
-    metadataCid: "Qm126",
-    imageCid: null,
-  },
-  {
-    id: "dummy-995",
-    slug: "regenerative-farm",
-    title: "Regenerative Farm",
-    description: "Converting conventional farmland to regenerative practices.",
-    tags: ["agriculture", "iowa"],
-    fundingGoal: "100000000000",
-    totalFunded: "45000000000",
-    currentStage: 2,
-    ownerAddress: "0x1234567890abcdef1234567890abcdef12343333",
-    metadataCid: "Qm127",
-    imageCid: null,
-  }
-];
-
 export default async function HomePage() {
-  const backendProjects = await getProjects();
-  const projects = backendProjects.length > 0
-    ? [...backendProjects, ...DUMMY_PROJECTS].slice(0, 5)
-    : DUMMY_PROJECTS;
+  const projects = (await getProjects()).slice(0, 5);
   const t = await getTranslations("Index");
 
   const growSteps = [
@@ -319,16 +245,34 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-5 h-full">
-              <ProjectCard project={projects[0]} layout="grid" />
+          {projects.length === 0 ? (
+            <div className="rounded-[2rem] border border-line-strong bg-surface/50 p-12 text-center">
+              <p className="font-display text-2xl font-semibold text-earth-900 dark:text-verdant-100 mb-3">
+                {t("featured_projects_empty_title")}
+              </p>
+              <p className="text-earth-600 dark:text-verdant-400 mb-6">
+                {t("featured_projects_empty_subtitle")}
+              </p>
+              <Link
+                href="/create"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold bg-verdant-600 text-bone-50 hover:bg-verdant-500 transition-colors"
+              >
+                <Leaf className="w-4 h-4" />
+                {t("launch_project")}
+              </Link>
             </div>
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {projects.slice(1, 5).map((project: any) => (
-                <ProjectCard key={project.id} project={project} layout="grid" />
-              ))}
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="lg:col-span-5 h-full">
+                <ProjectCard project={projects[0]} layout="grid" />
+              </div>
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {projects.slice(1, 5).map((project: any) => (
+                  <ProjectCard key={project.id} project={project} layout="grid" />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
