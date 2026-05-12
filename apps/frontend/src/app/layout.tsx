@@ -8,6 +8,7 @@ import NoticeModal from "@/components/NoticeModal";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
 import { BRAND, brandTitle } from "@/lib/brand";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const interDisplay = localFont({
   src: [
@@ -98,6 +99,7 @@ export default async function RootLayout({
             </NextIntlClientProvider>
           </ThemeProvider>
         </Web3Provider>
+        <SpeedInsights />
       </body>
     </html>
   );
