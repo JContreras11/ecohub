@@ -1,7 +1,8 @@
 -- CreateTable
 CREATE TABLE "projects" (
-    "id" SERIAL NOT NULL,
-    "on_chain_id" INTEGER,
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "on_chain_id" TEXT,
     "owner_address" TEXT NOT NULL,
     "metadata_cid" TEXT NOT NULL,
     "image_cid" TEXT,
@@ -22,8 +23,8 @@ CREATE TABLE "projects" (
 
 -- CreateTable
 CREATE TABLE "contributions" (
-    "id" SERIAL NOT NULL,
-    "project_id" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "project_id" TEXT NOT NULL,
     "contributor_address" TEXT NOT NULL,
     "amount" TEXT NOT NULL,
     "tx_hash" TEXT,
@@ -35,7 +36,7 @@ CREATE TABLE "contributions" (
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "wallet_address" TEXT NOT NULL,
     "display_name" TEXT,
     "avatar_url" TEXT,
@@ -47,6 +48,9 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "projects_slug_key" ON "projects"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "projects_on_chain_id_key" ON "projects"("on_chain_id");

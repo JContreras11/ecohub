@@ -1,7 +1,7 @@
 import type { Address } from "viem";
 
 export interface BackendContribution {
-  id?: number;
+  id?: string;
   contributorAddress: string;
   amount: string;
   txHash?: string | null;
@@ -10,8 +10,9 @@ export interface BackendContribution {
 }
 
 export interface BackendProject {
-  id: number;
-  onChainId: number | null;
+  id: string;
+  slug: string;
+  onChainId: string | null;
   ownerAddress: string;
   metadataCid: string;
   imageCid?: string | null;

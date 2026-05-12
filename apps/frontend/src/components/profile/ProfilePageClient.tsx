@@ -161,6 +161,7 @@ export default function ProfilePageClient() {
               .filter((entry) => entry.contributor.toLowerCase() === normalizedAddress)
               .map((entry) => ({
                 projectId: project.id,
+                projectSlug: project.slug,
                 projectTitle: project.title,
                 projectDescription: project.description,
                 projectImageCid: project.imageCid,
@@ -447,7 +448,7 @@ export default function ProfilePageClient() {
                     {contributions.map((item) => (
                       <Link
                         key={`${item.projectId}-${item.timestamp.toString()}-${item.amount.toString()}`}
-                        href={`/projects/${item.projectId}`}
+                        href={`/projects/${item.projectSlug}`}
                         className="group flex flex-col gap-3 rounded-[1.5rem] border border-line-strong bg-bone-100/70 px-5 py-4 transition-colors hover:border-verdant-400/40 hover:bg-bone-50 dark:border-earth-800 dark:bg-earth-900/40 dark:hover:bg-earth-900/70"
                       >
                         <div className="flex flex-wrap items-start justify-between gap-3">

@@ -52,12 +52,12 @@ export interface OnChainProject {
 /**
  * Fetch a project from the smart contract by its on-chain ID.
  */
-export async function getProjectFromChain(projectId: number): Promise<OnChainProject | null> {
+export async function getProjectFromChain(projectId: string | number | bigint): Promise<OnChainProject | null> {
   const contract = getContract();
   if (!contract) return null;
 
   try {
-    const data = await contract.getProject(projectId);
+    const data = await contract.getProject(BigInt(projectId));
     return {
       id:              data.id,
       owner:           data.owner,

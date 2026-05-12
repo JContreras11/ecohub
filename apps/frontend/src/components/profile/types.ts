@@ -23,12 +23,13 @@ export interface ProjectsResponse {
 }
 
 export interface ProfileContributionItem {
-  projectId: number;
+  projectId: string;
+  projectSlug: string;
   projectTitle: string;
   projectDescription: string;
   projectImageCid?: string | null;
   ownerAddress: string;
-  onChainId: number;
+  onChainId: string;
   amount: bigint;
   timestamp: bigint;
   currentStage: number;

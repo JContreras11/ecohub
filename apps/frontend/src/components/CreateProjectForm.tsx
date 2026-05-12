@@ -273,8 +273,8 @@ function CreateProjectFormInner() {
 
       setTxHash(hash);
 
-      if (uploadData.projectId) {
-        fetch(`${backendUrl}/api/projects/${uploadData.projectId}/sync`, {
+      if (uploadData.slug) {
+        fetch(`${backendUrl}/api/projects/${uploadData.slug}/sync`, {
           method:  "POST",
           headers: { "Content-Type": "application/json" },
           body:    JSON.stringify({ txHash: hash }),

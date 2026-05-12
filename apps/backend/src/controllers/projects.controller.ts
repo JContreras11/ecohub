@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import prisma from "../lib/prisma.js";
+import { slugify, isSlugAvailable } from "../lib/slug.js";
 import {
   uploadFileToPinata,
   uploadMetadataToPinata,
@@ -24,10 +25,10 @@ const CreateProjectSchema = z.object({
 
 /**
  * POST /api/projects/upload
- * 
+ *
  * Uploads project image + metadata to IPFS via Pinata.
- * Returns: { imageCid, metadataCid, gatewayUrl }
- * 
+ * Returns: { id, slug, metadataCid, imageCid, gatewayUrl }
+ *
  * Expects: multipart/form-data with:
  *   - image (file)
  *   - title, description, readme, tags (JSON string), authorAddress, fundingGoal
@@ -40,6 +41,19 @@ export async function uploadProject(req: Request, res: Response) {
     }
 
     const { title, description, readme, tags, authorAddress, fundingGoal } = parsed.data;
+
+    const slug = slugify(title);
+    if (!slug) {
+      return res.status(400).json({ error: "Title cannot produce a valid URL slug" });
+    }
+
+    const available = await isSlugAvailable(slug);
+    if (!available) {
+      return res.status(409).json({
+        error: "A project with this title already exists. Pick a different title.",
+        slug,
+      });
+    }
 
     let imageCid: string | undefined;
     if (req.file) {
@@ -65,6 +79,7 @@ export async function uploadProject(req: Request, res: Response) {
 
     const project = await prisma.project.create({
       data: {
+        slug,
         ownerAddress: authorAddress,
         metadataCid,
         imageCid:     imageCid || null,
@@ -80,14 +95,35 @@ export async function uploadProject(req: Request, res: Response) {
     return res.status(201).json({
       success:     true,
       projectId:   project.id,
+      slug:        project.slug,
       metadataCid,
       imageCid:    imageCid || null,
       gatewayUrl:  buildGatewayUrlSync(metadataCid),
       imageUrl:    imageCid ? buildGatewayUrlSync(imageCid) : null,
     });
   } catch (err: any) {
+    if (err?.code === "P2002") {
+      return res.status(409).json({ error: "Duplicate slug", details: err.meta });
+    }
     console.error("[projects/upload] Error:", err.message);
     return res.status(500).json({ error: "Failed to upload project", details: err.message });
+  }
+}
+
+/**
+ * GET /api/projects/check-slug?title=...
+ * Async availability probe for the client. Returns { slug, available }.
+ */
+export async function checkSlug(req: Request, res: Response) {
+  try {
+    const title = typeof req.query.title === "string" ? req.query.title : "";
+    const slug = slugify(title);
+    if (!slug) return res.status(400).json({ error: "Invalid title" });
+    const available = await isSlugAvailable(slug);
+    return res.json({ slug, available });
+  } catch (err: any) {
+    console.error("[projects/check-slug] Error:", err.message);
+    return res.status(500).json({ error: "Failed to check slug" });
   }
 }
 
@@ -147,16 +183,16 @@ export async function listProjects(req: Request, res: Response) {
 }
 
 /**
- * GET /api/projects/:id
- * Returns a single project by its DB ID.
+ * GET /api/projects/:slug
+ * Returns a single project by its slug.
  */
 export async function getProject(req: Request, res: Response) {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id)) return res.status(400).json({ error: "Invalid project ID" });
+    const slug = req.params.slug;
+    if (!slug) return res.status(400).json({ error: "Missing project slug" });
 
     const project = await prisma.project.findUnique({
-      where: { id },
+      where: { slug },
       include: { contributions: { orderBy: { createdAt: "desc" }, take: 20 } },
     });
 
@@ -170,23 +206,27 @@ export async function getProject(req: Request, res: Response) {
 }
 
 /**
- * POST /api/projects/:id/sync
+ * POST /api/projects/:slug/sync
  * Syncs on-chain project data (totalFunded, currentStage) into the local DB.
- * Called after a fundProject or withdrawFunds transaction is confirmed.
+ * Lookup is performed via onChainId in the request body.
  */
 export async function syncProject(req: Request, res: Response) {
   try {
     const { onChainId, totalFunded, currentStage, txHash } = req.body;
 
-    if (!onChainId) return res.status(400).json({ error: "onChainId required" });
+    if (onChainId === undefined || onChainId === null || onChainId === "") {
+      return res.status(400).json({ error: "onChainId required" });
+    }
+
+    const onChainIdStr = String(onChainId);
 
     const updated = await prisma.project.updateMany({
-      where:  { onChainId: parseInt(onChainId, 10) },
+      where:  { onChainId: onChainIdStr },
       data: {
         totalFunded:  totalFunded?.toString() || undefined,
         currentStage: currentStage !== undefined ? parseInt(currentStage, 10) : undefined,
         txHash:       txHash || undefined,
-        onChainId:    parseInt(onChainId, 10),
+        onChainId:    onChainIdStr,
       },
     });
 

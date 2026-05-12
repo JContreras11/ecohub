@@ -8,7 +8,8 @@ import { useTranslations } from "next-intl";
 import { ProgressArc, StageBar } from "@/components/widgets";
 
 interface Project {
-  id: number;
+  id: string;
+  slug: string;
   title: string;
   description: string;
   tags: string[];
@@ -55,7 +56,7 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
   const [imgSrc, setImgSrc] = useState(initialImageUrl);
 
   const handleNavigate = () => {
-    router.push(`/projects/${project.id}`);
+    router.push(`/projects/${project.slug}`);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {

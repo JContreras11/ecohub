@@ -141,13 +141,13 @@ export default function ProjectActionPanel({
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
 
     try {
-      await fetch(`${backendUrl}/api/projects/${project.id}/sync`, {
+      await fetch(`${backendUrl}/api/projects/${project.slug}/sync`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          onChainId: Number(onChainId),
+          onChainId: onChainId.toString(),
           totalFunded: freshProject.totalFunded.toString(),
           currentStage: Number(freshProject.currentStage),
           txHash: latestHash,

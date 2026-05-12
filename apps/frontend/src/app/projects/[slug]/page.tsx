@@ -12,12 +12,12 @@ const BACKEND_URL =
 
 interface ProjectDetailPageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
-async function getProject(id: number): Promise<BackendProject> {
-  const response = await fetch(`${BACKEND_URL}/api/projects/${id}`, {
+async function getProject(slug: string): Promise<BackendProject> {
+  const response = await fetch(`${BACKEND_URL}/api/projects/${encodeURIComponent(slug)}`, {
     cache: "no-store",
   });
 
@@ -26,25 +26,24 @@ async function getProject(id: number): Promise<BackendProject> {
   }
 
   if (!response.ok) {
-    throw new Error(`Failed to load project ${id}`);
+    throw new Error(`Failed to load project ${slug}`);
   }
 
   return response.json();
 }
 
 export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const projectId = Number.parseInt(id, 10);
+  const { slug } = await params;
   const t = await getTranslations("ProjectDetail");
 
-  if (!Number.isInteger(projectId) || projectId <= 0) {
+  if (!slug) {
     return {
       title: brandTitle(t("meta_title_not_found")),
     };
   }
 
   try {
-    const project = await getProject(projectId);
+    const project = await getProject(slug);
     return {
       title: brandTitle(project.title),
       description: project.description,
@@ -57,14 +56,13 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
 }
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const { id } = await params;
-  const projectId = Number.parseInt(id, 10);
+  const { slug } = await params;
 
-  if (!Number.isInteger(projectId) || projectId <= 0) {
+  if (!slug) {
     notFound();
   }
 
-  const project = await getProject(projectId);
+  const project = await getProject(slug);
 
   return <ProjectDetailClient project={project} />;
 }

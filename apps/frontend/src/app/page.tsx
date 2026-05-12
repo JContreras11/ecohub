@@ -37,7 +37,8 @@ async function getProjects() {
 
 const DUMMY_PROJECTS = [
   {
-    id: 999,
+    id: "dummy-999",
+    slug: "mycelium-network-nodes",
     title: "Mycelium Network Nodes",
     description: "Open-source sensors for soil fungal network monitoring.",
     tags: ["hardware", "cascadia"],
@@ -49,7 +50,8 @@ const DUMMY_PROJECTS = [
     imageCid: null,
   },
   {
-    id: 998,
+    id: "dummy-998",
+    slug: "solarpunk-microgrid",
     title: "Solarpunk Microgrid",
     description: "Community-owned solar microgrid in urban areas.",
     tags: ["energy", "new york"],
@@ -61,7 +63,8 @@ const DUMMY_PROJECTS = [
     imageCid: null,
   },
   {
-    id: 997,
+    id: "dummy-997",
+    slug: "ocean-cleanup-drone",
     title: "Ocean Cleanup Drone",
     description: "Autonomous drone for collecting plastic waste.",
     tags: ["hardware", "pacific"],
@@ -73,7 +76,8 @@ const DUMMY_PROJECTS = [
     imageCid: null,
   },
   {
-    id: 996,
+    id: "dummy-996",
+    slug: "vertical-forest",
     title: "Vertical Forest",
     description: "Urban reforestation project using vertical architecture.",
     tags: ["nature", "milan"],
@@ -85,7 +89,8 @@ const DUMMY_PROJECTS = [
     imageCid: null,
   },
   {
-    id: 995,
+    id: "dummy-995",
+    slug: "regenerative-farm",
     title: "Regenerative Farm",
     description: "Converting conventional farmland to regenerative practices.",
     tags: ["agriculture", "iowa"],
@@ -100,7 +105,9 @@ const DUMMY_PROJECTS = [
 
 export default async function HomePage() {
   const backendProjects = await getProjects();
-  const projects = backendProjects.length >= 5 ? backendProjects : DUMMY_PROJECTS;
+  const projects = backendProjects.length > 0
+    ? [...backendProjects, ...DUMMY_PROJECTS].slice(0, 5)
+    : DUMMY_PROJECTS;
   const t = await getTranslations("Index");
 
   const growSteps = [
