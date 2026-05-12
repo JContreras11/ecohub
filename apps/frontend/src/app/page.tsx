@@ -34,8 +34,42 @@ async function getProjects() {
   }
 }
 
+async function getProjectDetail(slug: string) {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/projects/${encodeURIComponent(slug)}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function formatUsdcCompact(baseUnits: string | number | null | undefined): string {
+  const value = Number(baseUnits ?? 0) / 1_000_000;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}k`;
+  return `$${Math.round(value)}`;
+}
+
+function pickFeaturedCover(featured: any): string {
+  const heroAsset = featured?.assets?.find?.((a: any) => a.kind === "IMAGE");
+  if (heroAsset?.url) return heroAsset.url;
+  return "/images/landing-hero.jpg";
+}
+
 export default async function HomePage() {
   const projects = (await getProjects()).slice(0, 5);
+  const featured = projects[0] ? await getProjectDetail(projects[0].slug) : null;
+  const featuredCover = featured ? pickFeaturedCover(featured) : "/images/landing-hero.jpg";
+  const featuredBackerCount = featured?.contributions
+    ? new Set(featured.contributions.map((c: any) => c.contributorAddress?.toLowerCase())).size
+    : 0;
+  const featuredStageLabel = featured ? Math.min((featured.currentStage ?? 0) + 1, 3) : 1;
+  const featuredRatio = featured && Number(featured.fundingGoal) > 0
+    ? Math.min(1, Number(featured.totalFunded) / Number(featured.fundingGoal))
+    : 0;
   const t = await getTranslations("Index");
 
   const growSteps = [
@@ -74,7 +108,7 @@ export default async function HomePage() {
   return (
     <div className="w-full">
       {/* ── Hero Section ──────────────────────────────────────────────────── */}
-      <section className="relative min-h-[880px] pb-20 overflow-hidden font-body bg-bg">
+      <section className="relative min-h-screen flex items-start pt-28 pb-24 overflow-hidden font-body bg-bg">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <AuroraGradient intensity={1} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg" />
@@ -85,8 +119,8 @@ export default async function HomePage() {
           <WaterCursor tint="bio" />
         </div>
 
-        <div className="relative max-w-[1480px] mx-auto pt-[180px] px-4 sm:px-8 z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-end">
+        <div className="relative max-w-[1480px] mx-auto w-full px-4 sm:px-8 z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start">
             <div>
               <div className="flex flex-wrap gap-2 mb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-bone-200 dark:bg-earth-800 text-earth-900 dark:text-bone-50 text-xs font-medium border border-line-strong">
@@ -148,48 +182,62 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Floating featured project card */}
-            <div className="animate-drift-y-slow relative mt-12 lg:mt-0 z-10 w-full max-w-md mx-auto pointer-events-auto">
-              <div className="glass-leaf rounded-[2rem] overflow-hidden shadow-bloom border border-line-strong bg-bg">
-                <div className="relative w-full h-60 bg-verdant-900 overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('/images/landing-hero.jpg')] bg-cover bg-center opacity-80" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-earth-900/90 to-transparent" />
-                </div>
-                <div className="p-6 relative -mt-4 bg-bg rounded-t-3xl">
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-solar-100 dark:bg-solar-900/30 border border-solar-200 dark:border-solar-700/30 text-solar-700 dark:text-solar-300 text-xs font-medium">
-                      <div className="w-1.5 h-1.5 rounded-full bg-solar-500 dark:bg-solar-400 animate-pulse" />
-                      {t("featured_card_stage")}
-                    </div>
-                    <span className="font-mono text-xs text-earth-600 dark:text-verdant-300 tracking-wider">MYCO-1</span>
+            {/* Floating featured project card — latest published */}
+            {featured && (
+              <div className="animate-drift-y-slow relative mt-12 lg:mt-0 z-10 w-full max-w-md mx-auto pointer-events-auto">
+                <Link
+                  href={`/projects/${featured.slug}`}
+                  className="block glass-leaf rounded-[2rem] overflow-hidden shadow-bloom border border-line-strong bg-bg transition-transform hover:-translate-y-1 hover:shadow-glow-verdant"
+                >
+                  <div className="relative w-full h-60 bg-verdant-900 overflow-hidden">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center opacity-80"
+                      style={{ backgroundImage: `url('${featuredCover}')` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-earth-900/90 to-transparent" />
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-earth-900 dark:text-verdant-100 mb-2 leading-tight">
-                    {t("featured_card_title")}
-                  </h3>
-                  <p className="text-sm text-earth-600 dark:text-verdant-400 mb-4 line-clamp-2 leading-relaxed">
-                    {t("featured_card_desc")}
-                  </p>
-                  <StageBar cachedCurrentStage={2} />
-                  <div className="flex justify-between items-center mt-5">
-                    <div>
-                      <div className="font-display text-2xl font-bold text-verdant-600 dark:text-verdant-300 leading-none">
-                        $14.5k <span className="text-sm font-normal text-earth-500 dark:text-verdant-300 font-body">/ $50k</span>
+                  <div className="p-6 relative -mt-4 bg-bg rounded-t-3xl">
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-solar-100 dark:bg-solar-900/30 border border-solar-200 dark:border-solar-700/30 text-solar-700 dark:text-solar-300 text-xs font-medium">
+                        <div className="w-1.5 h-1.5 rounded-full bg-solar-500 dark:bg-solar-400 animate-pulse" />
+                        {t("featured_card_stage", { stage: featuredStageLabel })}
                       </div>
-                      <div className="text-xs text-earth-500 dark:text-verdant-300 mt-1">{t("featured_card_backers", { count: 142, days: 12 })}</div>
+                      <span className="font-mono text-xs text-earth-600 dark:text-verdant-300 tracking-wider uppercase">
+                        {(featured.tags?.[0] ?? "project").slice(0, 14)}
+                      </span>
                     </div>
-                    <ProgressArc value={14500 / 50000} size={56} stroke={4} />
+                    <h3 className="font-display text-2xl font-bold text-earth-900 dark:text-verdant-100 mb-2 leading-tight line-clamp-2">
+                      {featured.title}
+                    </h3>
+                    <p className="text-sm text-earth-600 dark:text-verdant-400 mb-4 line-clamp-2 leading-relaxed">
+                      {featured.description}
+                    </p>
+                    <StageBar cachedCurrentStage={Math.min(featured.currentStage ?? 0, 2)} />
+                    <div className="flex justify-between items-center mt-5">
+                      <div>
+                        <div className="font-display text-2xl font-bold text-verdant-600 dark:text-verdant-300 leading-none">
+                          {formatUsdcCompact(featured.totalFunded)}
+                          <span className="text-sm font-normal text-earth-500 dark:text-verdant-300 font-body">
+                            {" "}/ {formatUsdcCompact(featured.fundingGoal)}
+                          </span>
+                        </div>
+                        <div className="text-xs text-earth-500 dark:text-verdant-300 mt-1">
+                          {t("featured_card_backers_dynamic", { count: featuredBackerCount })}
+                        </div>
+                      </div>
+                      <ProgressArc value={featuredRatio} size={56} stroke={4} />
+                    </div>
                   </div>
+                </Link>
+
+                <div className="animate-drift-y absolute -top-9 -right-7 px-3.5 py-2.5 rounded-full bg-solar-400 text-earth-900 font-mono text-xs tracking-wider uppercase shadow-glow-solar z-20 hidden sm:block pointer-events-none">
+                  {t("live_badge")}
+                </div>
+                <div className="animate-drift-y-slow absolute -bottom-5 -left-7 px-3.5 py-2.5 rounded-xl bg-earth-900 dark:bg-surface border border-line-strong text-bone-50 font-mono text-[11px] shadow-bloom z-20 hidden sm:block pointer-events-none">
+                  {t("tx_released")}
                 </div>
               </div>
-
-              {/* Floating decoration cards */}
-              <div className="animate-drift-y absolute -top-9 -right-7 px-3.5 py-2.5 rounded-full bg-solar-400 text-earth-900 font-mono text-xs tracking-wider uppercase shadow-glow-solar z-20 hidden sm:block">
-                {t("live_badge")}
-              </div>
-              <div className="animate-drift-y-slow absolute -bottom-5 -left-7 px-3.5 py-2.5 rounded-xl bg-earth-900 dark:bg-surface border border-line-strong text-bone-50 font-mono text-[11px] shadow-bloom z-20 hidden sm:block">
-                {t("tx_released")}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
