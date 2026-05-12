@@ -116,7 +116,7 @@ export default function ProfileEditSheet({
 
           <div className="flex-1 space-y-6 px-6 py-6">
             <div className="space-y-2">
-              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                 {t("fields.display_name")}
               </label>
               <Input
@@ -128,7 +128,7 @@ export default function ProfileEditSheet({
             </div>
 
             <div className="space-y-2">
-              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                 {t("fields.avatar_url")}
               </label>
               <Input
@@ -140,7 +140,7 @@ export default function ProfileEditSheet({
             </div>
 
             <div className="space-y-2">
-              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                 {t("fields.bio")}
               </label>
               <textarea

@@ -92,11 +92,11 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
           </h3>
           <p className="mb-2 line-clamp-1 text-xs text-earth-500 dark:text-verdant-400">{project.description}</p>
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5 text-xs text-earth-500 dark:text-verdant-500">
+            <div className="flex items-center gap-1.5 text-xs text-earth-500 dark:text-verdant-300">
               <TrendingUp className="h-3 w-3" />
               <span className="font-medium text-earth-900 dark:text-verdant-200">{formatUSDC(project.totalFunded)}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-earth-500 dark:text-verdant-500">
+            <div className="flex items-center gap-1.5 text-xs text-earth-500 dark:text-verdant-300">
               <Users className="h-3 w-3" />
               <span className="font-mono">{shortenAddress(project.ownerAddress)}</span>
             </div>
@@ -110,7 +110,7 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
             target="_blank"
             rel="noopener noreferrer"
             onClick={stopCardNavigation}
-            className="rounded-full p-2 text-earth-400 transition-colors hover:bg-bone-200 dark:text-verdant-500 dark:hover:bg-earth-800"
+            className="rounded-full p-2 text-earth-400 transition-colors hover:bg-bone-200 dark:text-verdant-300 dark:hover:bg-earth-800"
           >
             <ExternalLink className="h-4 w-4" />
           </a>
@@ -167,21 +167,21 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
 
         <div className="flex items-center justify-between border-t border-line-strong py-4 dark:border-earth-800">
           <div className="flex flex-col">
-            <span className="mb-1 text-[10px] font-mono uppercase tracking-widest text-earth-400 dark:text-verdant-600">
+            <span className="mb-1 text-[10px] font-mono uppercase tracking-widest text-earth-400 dark:text-verdant-400">
               Funding Progress
             </span>
             <div className="flex items-baseline gap-1">
               <span className="text-lg font-bold text-earth-900 dark:text-verdant-100">
                 {formatUSDC(project.totalFunded)}
               </span>
-              <span className="text-xs text-earth-400 dark:text-verdant-500">/ {formatUSDC(project.fundingGoal)}</span>
+              <span className="text-xs text-earth-400 dark:text-verdant-300">/ {formatUSDC(project.fundingGoal)}</span>
             </div>
           </div>
           <ProgressArc value={fundedPercent / 100} size={52} stroke={4} />
         </div>
 
         <div className="flex items-center justify-between border-t border-line-strong pt-4 dark:border-earth-800">
-          <div className="flex items-center gap-1.5 text-xs text-earth-500 dark:text-verdant-500">
+          <div className="flex items-center gap-1.5 text-xs text-earth-500 dark:text-verdant-300">
             <Users className="h-3 w-3" />
             <span className="font-mono">{shortenAddress(project.ownerAddress)}</span>
           </div>

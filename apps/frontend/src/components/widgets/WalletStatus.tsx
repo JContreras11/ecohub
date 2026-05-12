@@ -67,12 +67,12 @@ function WalletStatusInner({
     return (
       <div className="relative group cursor-pointer">
         <div className="w-8 h-8 rounded-lg bg-earth-900 dark:bg-verdant-500/20 flex items-center justify-center border border-line-strong dark:border-verdant-500/30">
-          <div className="w-2 h-2 rounded-full bg-verdant-500 shadow-[0_0_8px_var(--verdant-500)] animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-verdant-500 shadow-[0_0_8px_oklch(var(--verdant-500))] animate-pulse" />
         </div>
         <div className="absolute top-full right-0 mt-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
           <div className="glass-leaf p-3 rounded-xl border border-line-strong shadow-leaf min-w-[160px]">
              <p className="text-xs font-mono text-earth-900 dark:text-verdant-100 mb-1">{displayName}</p>
-             <p className="text-[10px] text-earth-500 dark:text-verdant-500">{getChainName(chainId)}</p>
+             <p className="text-[10px] text-earth-500 dark:text-verdant-300">{getChainName(chainId)}</p>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@ function WalletStatusInner({
             {displayName}
           </span>
           {showBalance && balance && (
-            <span className="text-[10px] font-mono text-bone-400 dark:text-verdant-500 mt-1">
+            <span className="text-[10px] font-mono text-bone-400 dark:text-verdant-300 mt-1">
               {parseFloat(balance.formatted).toFixed(4)} {balance.symbol}
             </span>
           )}

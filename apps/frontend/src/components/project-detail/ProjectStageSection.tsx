@@ -73,7 +73,7 @@ export default function ProjectStageSection({
               <div className="font-display text-2xl text-earth-900 dark:text-bone-50">
                 {formatUsdcFromBaseUnits(totalFunded)}
               </div>
-              <div className="text-xs text-earth-500 dark:text-verdant-500">
+              <div className="text-xs text-earth-500 dark:text-verdant-300">
                 of {formatUsdcFromBaseUnits(fundingGoal)} goal funded
               </div>
               <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-verdant-700 dark:text-verdant-300">
@@ -115,7 +115,7 @@ export default function ProjectStageSection({
               future: {
                 wrapper: "border-line-strong bg-bone-50/90 dark:bg-earth-900/40",
                 badge: "bg-bone-300 text-earth-700 dark:bg-earth-800 dark:text-bone-200",
-                accent: "text-earth-500 dark:text-verdant-500",
+                accent: "text-earth-500 dark:text-verdant-300",
                 label: "Queued behind previous release",
               },
             }[state];
@@ -130,7 +130,7 @@ export default function ProjectStageSection({
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="text-right">
-                    <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                       {PROJECT_DETAIL_STAGE_LABELS[index]}
                     </div>
                     <div className={`mt-1 text-xs font-medium ${styles.accent}`}>{styles.label}</div>
@@ -143,7 +143,7 @@ export default function ProjectStageSection({
                 </p>
 
                 <div className="mt-5 rounded-[1.1rem] border border-black/5 bg-black/5 px-4 py-3 dark:border-white/5 dark:bg-white/5">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                     Estimated tranche
                   </div>
                   <div className="mt-2 font-display text-2xl text-earth-900 dark:text-bone-50">
@@ -151,7 +151,7 @@ export default function ProjectStageSection({
                       ? "Loading…"
                       : formatUsdcFromBaseUnits(activeAmount, 0)}
                   </div>
-                  <div className="mt-2 text-xs text-earth-500 dark:text-verdant-500">
+                  <div className="mt-2 text-xs text-earth-500 dark:text-verdant-300">
                     Final stage claims any remainder still held in escrow after earlier releases.
                   </div>
                 </div>

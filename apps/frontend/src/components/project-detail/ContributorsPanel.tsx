@@ -41,7 +41,7 @@ export default function ContributorsPanel({
         </div>
 
         <div className="rounded-full border border-line-strong bg-bone-50/80 px-4 py-2 text-right dark:bg-earth-900/50">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
             {sourceLabel}
           </div>
           <div className="mt-1 text-lg font-semibold text-earth-900 dark:text-bone-50">{contributors.length}</div>
@@ -49,7 +49,7 @@ export default function ContributorsPanel({
       </div>
 
       {isLoading && project.onChainId != null && contributors.length === 0 ? (
-        <div className="mt-6 rounded-[1.25rem] border border-line-strong bg-bone-50/70 px-4 py-5 text-sm text-earth-500 dark:bg-earth-900/40 dark:text-verdant-500">
+        <div className="mt-6 rounded-[1.25rem] border border-line-strong bg-bone-50/70 px-4 py-5 text-sm text-earth-500 dark:bg-earth-900/40 dark:text-verdant-300">
           Loading contributor history from the contract…
         </div>
       ) : contributors.length === 0 ? (
@@ -58,7 +58,7 @@ export default function ContributorsPanel({
             <HandCoins className="h-6 w-6" />
           </div>
           <h3 className="mt-4 text-lg font-semibold text-earth-900 dark:text-bone-50">No backers yet</h3>
-          <p className="mt-2 text-sm leading-relaxed text-earth-500 dark:text-verdant-500">
+          <p className="mt-2 text-sm leading-relaxed text-earth-500 dark:text-verdant-300">
             The first verified contribution will appear here as soon as capital reaches the project.
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function ContributorsPanel({
                   <div className="font-mono text-sm font-semibold text-earth-900 dark:text-bone-50">
                     {shortenAddress(contributor.address)}
                   </div>
-                  <div className="mt-1 text-xs text-earth-500 dark:text-verdant-500">
+                  <div className="mt-1 text-xs text-earth-500 dark:text-verdant-300">
                     {contributor.count} contribution{contributor.count === 1 ? "" : "s"}
                   </div>
                 </div>

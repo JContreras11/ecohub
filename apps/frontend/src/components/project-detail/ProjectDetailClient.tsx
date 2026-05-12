@@ -258,7 +258,7 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
                 README + metadata
               </span>
               {project.metadataCid && (
-                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                   CID {project.metadataCid.slice(0, 8)}…
                 </span>
               )}

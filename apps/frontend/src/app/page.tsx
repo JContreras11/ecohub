@@ -217,7 +217,7 @@ export default async function HomePage() {
                       <div className="w-1.5 h-1.5 rounded-full bg-solar-500 dark:bg-solar-400 animate-pulse" />
                       Funding · Stage 02
                     </div>
-                    <span className="font-mono text-xs text-earth-600 dark:text-verdant-500 tracking-wider">MYCO-1</span>
+                    <span className="font-mono text-xs text-earth-600 dark:text-verdant-300 tracking-wider">MYCO-1</span>
                   </div>
                   <h3 className="font-display text-2xl font-bold text-earth-900 dark:text-verdant-100 mb-2 leading-tight">
                     Mycelium Network Nodes
@@ -229,9 +229,9 @@ export default async function HomePage() {
                   <div className="flex justify-between items-center mt-5">
                     <div>
                       <div className="font-display text-2xl font-bold text-verdant-600 dark:text-verdant-300 leading-none">
-                        $14.5k <span className="text-sm font-normal text-earth-500 dark:text-verdant-500 font-body">/ $50k</span>
+                        $14.5k <span className="text-sm font-normal text-earth-500 dark:text-verdant-300 font-body">/ $50k</span>
                       </div>
-                      <div className="text-xs text-earth-500 dark:text-verdant-500 mt-1">142 backers · 12d left</div>
+                      <div className="text-xs text-earth-500 dark:text-verdant-300 mt-1">142 backers · 12d left</div>
                     </div>
                     <ProgressArc value={14500 / 50000} size={56} stroke={4} />
                   </div>
@@ -270,7 +270,7 @@ export default async function HomePage() {
             <div key={step.step} className="group relative pt-8 hover:-translate-y-1.5 transition-transform duration-300">
               <div className="w-16 h-16 rounded-[1.25rem] bg-surface border border-line-strong shadow-leaf flex items-center justify-center mx-auto mb-6 relative z-10 group-hover:border-verdant-500/40 transition-colors">
                 <step.icon className={`w-8 h-8 ${step.color}`} />
-                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-bg border border-line-strong flex items-center justify-center font-mono text-[10px] font-bold text-earth-500 dark:text-verdant-500">
+                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-bg border border-line-strong flex items-center justify-center font-mono text-[10px] font-bold text-earth-500 dark:text-verdant-300">
                   {step.step}
                 </div>
               </div>

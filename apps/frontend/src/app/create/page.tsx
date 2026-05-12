@@ -13,7 +13,7 @@ const GREENHOUSE_IMAGE = "/images/create-greenhouse.jpg";
 
 export default function CreatePage() {
   return (
-    <div className="relative min-h-screen bg-[linear-gradient(180deg,var(--verdant-50)_0%,var(--bg)_600px)]">
+    <div className="relative min-h-screen bg-[linear-gradient(180deg,oklch(var(--verdant-50))_0%,var(--bg)_600px)]">
       {/* Subtle banner image */}
       <div className="absolute top-0 left-0 right-0 h-[480px] overflow-hidden z-0">
         <img 
@@ -21,7 +21,7 @@ export default function CreatePage() {
           alt="Greenhouse"
           className="w-full h-full object-cover opacity-50" 
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.20_0.05_145/0.4),var(--verdant-50))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.20_0.05_145/0.4),oklch(var(--verdant-50)))]" />
       </div>
 
       <WindCanvas density={0.6} palette="forest" />

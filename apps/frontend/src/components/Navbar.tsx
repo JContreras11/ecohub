@@ -106,7 +106,7 @@ export default function Navbar() {
             </div>
             <div className="pt-4 border-t border-line-strong dark:border-earth-800 flex flex-col gap-4">
               <div className="flex items-center justify-between px-4">
-                <span className="text-sm text-earth-500 dark:text-verdant-500">{t("language")}</span>
+                <span className="text-sm text-earth-500 dark:text-verdant-300">{t("language")}</span>
                 <LanguageSwitcher />
               </div>
               <div className="px-2">

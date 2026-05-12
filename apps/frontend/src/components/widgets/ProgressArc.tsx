@@ -45,7 +45,7 @@ function ProgressArcVisual({
           cx={size / 2}
           cy={size / 2}
           r={r}
-          stroke="var(--verdant-100)"
+          stroke="oklch(var(--verdant-100))"
           strokeWidth={stroke}
           fill="none"
           className="dark:stroke-[oklch(0.99_0.005_90/0.1)]"
@@ -55,7 +55,7 @@ function ProgressArcVisual({
           cx={size / 2}
           cy={size / 2}
           r={r}
-          stroke="var(--verdant-600)"
+          stroke="oklch(var(--verdant-600))"
           strokeWidth={stroke}
           fill="none"
           strokeDasharray={c}

@@ -42,7 +42,7 @@ const FIELD_STYLE = "w-full border border-line rounded-[14px] px-4 py-3.5 font-b
 
 const Field = ({ label, register, name, errors = {}, placeholder, big = false, hint, type = "text", value, readOnly }: any) => (
   <div className="flex flex-col gap-2">
-    <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-500/70">
+    <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-300/80">
       {label}
     </label>
     {big ? (
@@ -65,7 +65,7 @@ const Field = ({ label, register, name, errors = {}, placeholder, big = false, h
       />
     )}
     {name && errors[name] && <span className="text-coral-500 text-xs font-medium">{errors[name].message}</span>}
-    {hint && <div className="text-[12px] text-ink-soft dark:text-verdant-600/70 mt-1">{hint}</div>}
+    {hint && <div className="text-[12px] text-ink-soft dark:text-verdant-300/70 mt-1">{hint}</div>}
   </div>
 );
 
@@ -97,7 +97,7 @@ const Stepper = ({ currentStep, setStep }: { currentStep: number; setStep: (n: S
               {state === "done" ? <CheckCircle2 className="w-3.5 h-3.5" /> : String(s.n).padStart(2, "0")}
             </div>
             <div>
-              <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-500/50">Step</div>
+              <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-300/60">Step</div>
               <div className="font-semibold text-[15px] text-earth-900 dark:text-bone-50">{s.l}</div>
             </div>
           </button>
@@ -124,7 +124,7 @@ const LivePreview = ({ control, totalGoal }: { control: any; totalGoal: number }
         </div>
         
         <div className="p-5 flex flex-col gap-3">
-          <div className="font-mono text-[11px] tracking-[0.18em] text-ink-soft dark:text-verdant-500 uppercase">
+          <div className="font-mono text-[11px] tracking-[0.18em] text-ink-soft dark:text-verdant-300 uppercase">
             {values.bioregion || "Bioregion or coordinates"}
           </div>
           <h3 className="display text-2xl text-earth-900 dark:text-bone-50">
@@ -138,7 +138,7 @@ const LivePreview = ({ control, totalGoal }: { control: any; totalGoal: number }
             {values.stages?.slice(0, 3).map((s: any, i: number) => (
               <div key={i} className="flex justify-between items-center text-[13px]">
                 <span className="text-earth-900 dark:text-bone-100 flex items-center gap-2">
-                  <span className="font-mono text-ink-soft dark:text-verdant-600">{String(i+1).padStart(2, "0")}</span>
+                  <span className="font-mono text-ink-soft dark:text-verdant-400">{String(i+1).padStart(2, "0")}</span>
                   <span className="truncate max-w-[140px]">{s.name || "New stage"}</span>
                 </span>
                 <span className="font-mono text-verdant-700 dark:text-verdant-400">${Number(s.amount || 0).toLocaleString()}</span>
@@ -347,7 +347,7 @@ function CreateProjectFormInner() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <Field label="Bioregion" name="bioregion" register={register} errors={errors} placeholder="Region or coordinates" />
                   <div className="flex flex-col gap-2">
-                    <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-500/70">License</label>
+                    <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-300/80">License</label>
                     <select {...register("license")} className={`${FIELD_STYLE} appearance-none`}>
                       <option>CERN-OHL-S</option>
                       <option>MIT</option>
@@ -358,7 +358,7 @@ function CreateProjectFormInner() {
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-500/70">Cover image</label>
+                  <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-300/80">Cover image</label>
                   <div 
                     onClick={() => fileInputRef.current?.click()}
                     className="border-2 border-dashed border-verdant-300 dark:border-verdant-800 rounded-2xl p-6 flex items-center gap-5 bg-verdant-50 dark:bg-earth-900/40 cursor-pointer hover:bg-verdant-100/50 transition-all"
@@ -386,7 +386,7 @@ function CreateProjectFormInner() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-500/70">Tags</label>
+                  <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-300/80">Tags</label>
                   <Field name="tags" register={register} errors={errors} placeholder="Coastal, Hardware, Mapping" />
                 </div>
               </div>
@@ -467,7 +467,7 @@ function CreateProjectFormInner() {
                 <h2 className="display text-4xl text-earth-900 dark:text-bone-50">On-chain configuration</h2>
                 
                 <div className="flex flex-col gap-3">
-                  <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-500/70">Network</label>
+                  <label className="font-mono text-[11px] tracking-[0.18em] uppercase text-ink-soft dark:text-verdant-300/80">Network</label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {["Base", "Optimism", "Polygon"].map((c) => {
                       const active = chainValue === c;

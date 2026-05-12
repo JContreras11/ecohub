@@ -284,23 +284,23 @@ export default function ProjectActionPanel({
 
         <div className="mt-5 grid grid-cols-2 gap-3">
           <div className="rounded-[1.35rem] border border-line-strong bg-bone-50/80 p-4 dark:bg-earth-900/40">
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
               Funded
             </div>
             <div className="mt-2 font-display text-2xl text-earth-900 dark:text-bone-50">
               {formatUsdcFromBaseUnits(totalFunded)}
             </div>
-            <div className="mt-1 text-xs text-earth-500 dark:text-verdant-500">
+            <div className="mt-1 text-xs text-earth-500 dark:text-verdant-300">
               of {formatUsdcFromBaseUnits(fundingGoal)} goal
             </div>
           </div>
 
           <div className="rounded-[1.35rem] border border-line-strong bg-bone-50/80 p-4 dark:bg-earth-900/40">
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
               Backers
             </div>
             <div className="mt-2 font-display text-2xl text-earth-900 dark:text-bone-50">{contributorCount}</div>
-            <div className="mt-1 text-xs text-earth-500 dark:text-verdant-500">
+            <div className="mt-1 text-xs text-earth-500 dark:text-verdant-300">
               Distinct wallets seen
             </div>
           </div>
@@ -320,7 +320,7 @@ export default function ProjectActionPanel({
               <Wallet className="h-4 w-4 text-verdant-500" />
               <span className="font-medium">Connect a wallet to fund or withdraw</span>
             </div>
-            <p className="mt-2 text-sm text-earth-500 dark:text-verdant-500">
+            <p className="mt-2 text-sm text-earth-500 dark:text-verdant-300">
               The detail page still shows cached metadata without a wallet, but writes remain disabled.
             </p>
           </div>
@@ -334,7 +334,7 @@ export default function ProjectActionPanel({
               <LockKeyhole className="h-4 w-4" />
               Withdraw {withdrawLabel}
             </Button>
-            <p className="text-sm text-earth-500 dark:text-verdant-500">
+            <p className="text-sm text-earth-500 dark:text-verdant-300">
               Claimable now: {formatUsdcFromBaseUnits(currentWithdrawable ?? BigInt(0))} from stage {currentStage + 1}.
             </p>
           </div>
@@ -348,7 +348,7 @@ export default function ProjectActionPanel({
               <Coins className="h-4 w-4" />
               Fund this project
             </Button>
-            <p className="text-sm text-earth-500 dark:text-verdant-500">
+            <p className="text-sm text-earth-500 dark:text-verdant-300">
               If allowance is missing, the app will request USDC approval before sending the contribution.
             </p>
           </div>
@@ -372,7 +372,7 @@ export default function ProjectActionPanel({
         <DialogContent className="max-w-xl rounded-[2rem] border border-line-strong bg-bone-50 text-earth-900 shadow-bloom dark:bg-earth-900 dark:text-bone-50">
           <DialogHeader>
             <DialogTitle className="display text-3xl">Fund current milestone</DialogTitle>
-            <DialogDescription className="text-sm leading-relaxed text-earth-500 dark:text-verdant-500">
+            <DialogDescription className="text-sm leading-relaxed text-earth-500 dark:text-verdant-300">
               Contributions are transferred into the {BRAND.contractName} escrow contract for project #{project.id}.
             </DialogDescription>
           </DialogHeader>
@@ -396,7 +396,7 @@ export default function ProjectActionPanel({
             </div>
 
             <div>
-              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+              <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                 Custom amount (USDC)
               </label>
               <Input
@@ -434,20 +434,20 @@ export default function ProjectActionPanel({
         <DialogContent className="max-w-xl rounded-[2rem] border border-line-strong bg-bone-50 text-earth-900 shadow-bloom dark:bg-earth-900 dark:text-bone-50">
           <DialogHeader>
             <DialogTitle className="display text-3xl">Withdraw current tranche</DialogTitle>
-            <DialogDescription className="text-sm leading-relaxed text-earth-500 dark:text-verdant-500">
+            <DialogDescription className="text-sm leading-relaxed text-earth-500 dark:text-verdant-300">
               Only the recorded creator can release the current stage from escrow.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="rounded-[1.35rem] border border-line-strong bg-bone-50/80 p-4 dark:bg-earth-800/60">
-              <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+              <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
                 Claiming now
               </div>
               <div className="mt-2 font-display text-3xl text-earth-900 dark:text-bone-50">
                 {formatUsdcFromBaseUnits(currentWithdrawable ?? BigInt(0))}
               </div>
-              <div className="mt-2 text-sm text-earth-500 dark:text-verdant-500">
+              <div className="mt-2 text-sm text-earth-500 dark:text-verdant-300">
                 {withdrawLabel} · contract stage index {currentStage}
               </div>
             </div>

@@ -2,77 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== :root — Light mode tokens ===== */
+/* ===== :root — Light mode tokens =====
+   Color tokens are stored as raw OKLCH channels (L C H) so Tailwind's
+   alpha modifier (`bg-verdant-500/20`, `from-earth-900/80`) can compose via
+   `oklch(var(--token) / <alpha-value>)`. Direct CSS use requires the
+   `oklch(var(--token))` wrapper. */
 :root {
   color-scheme: light dark;
 
-  /* === Color Palette === */
+  /* === Color Palette (raw OKLCH channels) === */
 
   /* Verdant — primary forest greens */
-  --verdant-50:  oklch(0.97 0.025 145);
-  --verdant-100: oklch(0.92 0.05 145);
-  --verdant-200: oklch(0.84 0.09 145);
-  --verdant-300: oklch(0.74 0.13 145);
-  --verdant-400: oklch(0.62 0.16 145);
-  --verdant-500: oklch(0.50 0.17 145);
-  --verdant-600: oklch(0.40 0.15 145);
-  --verdant-700: oklch(0.30 0.11 145);
-  --verdant-800: oklch(0.22 0.08 145);
-  --verdant-900: oklch(0.14 0.05 145);
-  --verdant-950: oklch(0.08 0.03 145);
+  --verdant-50:  0.97 0.025 145;
+  --verdant-100: 0.92 0.05 145;
+  --verdant-200: 0.84 0.09 145;
+  --verdant-300: 0.74 0.13 145;
+  --verdant-400: 0.62 0.16 145;
+  --verdant-500: 0.50 0.17 145;
+  --verdant-600: 0.40 0.15 145;
+  --verdant-700: 0.30 0.11 145;
+  --verdant-800: 0.22 0.08 145;
+  --verdant-900: 0.14 0.05 145;
+  --verdant-950: 0.08 0.03 145;
 
   /* Solar — electric amber */
-  --solar-50:  oklch(0.98 0.02 90);
-  --solar-100: oklch(0.95 0.05 90);
-  --solar-200: oklch(0.90 0.10 90);
-  --solar-300: oklch(0.85 0.14 90);
-  --solar-400: oklch(0.82 0.16 88);
-  --solar-500: oklch(0.78 0.17 85);
-  --solar-600: oklch(0.66 0.16 78);
-  --solar-700: oklch(0.52 0.14 72);
-  --solar-800: oklch(0.38 0.11 68);
-  --solar-900: oklch(0.26 0.08 65);
+  --solar-50:  0.98 0.02 90;
+  --solar-100: 0.95 0.05 90;
+  --solar-200: 0.90 0.10 90;
+  --solar-300: 0.85 0.14 90;
+  --solar-400: 0.82 0.16 88;
+  --solar-500: 0.78 0.17 85;
+  --solar-600: 0.66 0.16 78;
+  --solar-700: 0.52 0.14 72;
+  --solar-800: 0.38 0.11 68;
+  --solar-900: 0.26 0.08 65;
 
   /* Bio — bioluminescent teal */
-  --bio-50:  oklch(0.96 0.025 195);
-  --bio-100: oklch(0.92 0.05 195);
-  --bio-200: oklch(0.85 0.10 195);
-  --bio-300: oklch(0.78 0.13 195);
-  --bio-400: oklch(0.74 0.15 195);
-  --bio-500: oklch(0.70 0.16 195);
-  --bio-600: oklch(0.56 0.15 198);
-  --bio-700: oklch(0.42 0.12 202);
-  --bio-800: oklch(0.28 0.09 208);
-  --bio-900: oklch(0.18 0.06 212);
+  --bio-50:  0.96 0.025 195;
+  --bio-100: 0.92 0.05 195;
+  --bio-200: 0.85 0.10 195;
+  --bio-300: 0.78 0.13 195;
+  --bio-400: 0.74 0.15 195;
+  --bio-500: 0.70 0.16 195;
+  --bio-600: 0.56 0.15 198;
+  --bio-700: 0.42 0.12 202;
+  --bio-800: 0.28 0.09 208;
+  --bio-900: 0.18 0.06 212;
 
   /* Coral — terracotta accent */
-  --coral-300: oklch(0.78 0.14 35);
-  --coral-500: oklch(0.62 0.19 32);
-  --coral-700: oklch(0.46 0.16 28);
+  --coral-300: 0.78 0.14 35;
+  --coral-500: 0.62 0.19 32;
+  --coral-700: 0.46 0.16 28;
 
   /* Bone — cool/clean backgrounds */
-  --bone-50:  oklch(0.99 0.003 90);
-  --bone-100: oklch(0.97 0.005 90);
-  --bone-200: oklch(0.94 0.008 90);
-  --bone-300: oklch(0.90 0.012 88);
-  --bone-400: oklch(0.84 0.015 86);
+  --bone-50:  0.99 0.003 90;
+  --bone-100: 0.97 0.005 90;
+  --bone-200: 0.94 0.008 90;
+  --bone-300: 0.90 0.012 88;
+  --bone-400: 0.84 0.015 86;
 
   /* Earth — text/ink, dark + neutral */
-  --earth-700: oklch(0.32 0.04 145);
-  --earth-800: oklch(0.20 0.03 145);
-  --earth-900: oklch(0.12 0.02 145);
-  --earth-950: oklch(0.06 0.012 145);
+  --earth-400: 0.55 0.025 145;
+  --earth-500: 0.45 0.03 145;
+  --earth-600: 0.38 0.035 145;
+  --earth-700: 0.32 0.04 145;
+  --earth-800: 0.20 0.03 145;
+  --earth-900: 0.12 0.02 145;
+  --earth-950: 0.06 0.012 145;
 
-  /* === Semantic tokens === */
-  --bg:          var(--bone-100);
-  --bg-elev:     var(--bone-50);
-  --surface:     var(--bone-200);
-  --ink:         var(--earth-900);
-  --ink-soft:    var(--earth-700);
-  --primary:     var(--verdant-500);
-  --primary-ink: var(--bone-50);
-  --accent:      var(--solar-500);
-  --bio:         var(--bio-500);
+  /* === Semantic tokens (resolved to full color values) === */
+  --bg:          oklch(var(--bone-100));
+  --bg-elev:     oklch(var(--bone-50));
+  --surface:     oklch(var(--bone-200));
+  --ink:         oklch(var(--earth-900));
+  --ink-soft:    oklch(var(--earth-700));
+  --primary:     oklch(var(--verdant-500));
+  --primary-ink: oklch(var(--bone-50));
+  --accent:      oklch(var(--solar-500));
+  --bio:         oklch(var(--bio-500));
   --line:        oklch(0.85 0.02 145 / 0.5);
   --line-strong: oklch(0.20 0.03 145 / 0.18);
 
@@ -121,7 +128,7 @@
   --s-24: 96px;
   --s-32: 128px;
 
-  /* === shadcn-compatible aliases (Phase 2: shadcn/ui Primitives) === */
+  /* === shadcn-compatible aliases === */
   --background:            var(--bg);
   --foreground:            var(--ink);
   --card:                  var(--bg-elev);
@@ -133,92 +140,40 @@
   --secondary-foreground:  var(--ink);
   --muted:                 var(--surface);
   --muted-foreground:      var(--ink-soft);
-  --accent-foreground:     var(--earth-900);
-  --destructive:           var(--coral-500);
-  --destructive-foreground: var(--bone-50);
+  --accent-foreground:     oklch(var(--earth-900));
+  --destructive:           oklch(var(--coral-500));
+  --destructive-foreground: oklch(var(--bone-50));
   --border:                var(--line-strong);
   --input:                 var(--line-strong);
-  --ring:                  var(--verdant-500);
+  --ring:                  oklch(var(--verdant-500));
   --radius:                var(--r-lg);
 }
 
-/* ===== .dark — Dark mode overrides ===== */
+/* ===== .dark — Dark mode overrides =====
+   Raw color scales stay constant so utility classes (`dark:text-bone-50`,
+   `dark:text-verdant-100`) resolve to the literal shade the component author
+   intended. Only semantic tokens (--bg, --ink, --surface, …) flip. */
 .dark {
   /* === Surfaces === */
   --bg:        oklch(0.14 0.02 165);
   --bg-elev:   oklch(0.18 0.025 165);
   --surface:   oklch(0.22 0.03 165);
 
-  /* Bone tokens repurposed as dark elevations */
-  --bone-50:  oklch(0.18 0.025 165);
-  --bone-100: oklch(0.22 0.03 165);
-  --bone-200: oklch(0.26 0.035 165);
-  --bone-300: oklch(0.32 0.04 165);
-  --bone-400: oklch(0.40 0.045 165);
-
   /* === Ink (text) === */
   --ink:      oklch(0.97 0.005 90);
   --ink-soft: oklch(0.78 0.012 95);
-
-  /* Earth scale flipped — text needs brightest values */
-  --earth-700: oklch(0.78 0.012 95);
-  --earth-800: oklch(0.88 0.008 95);
-  --earth-900: oklch(0.97 0.005 90);
-  --earth-950: oklch(1.00 0 0);
-
-  /* === Verdant — shifted for dark backgrounds === */
-  --verdant-50:  oklch(0.20 0.04 145);
-  --verdant-100: oklch(0.24 0.06 145);
-  --verdant-200: oklch(0.30 0.08 145);
-  --verdant-300: oklch(0.45 0.13 145);
-  --verdant-400: oklch(0.62 0.16 145);
-  --verdant-500: oklch(0.74 0.18 150);
-  --verdant-600: oklch(0.82 0.20 150);
-  --verdant-700: oklch(0.88 0.18 150);
-  --verdant-800: oklch(0.92 0.14 150);
-  --verdant-900: oklch(0.95 0.08 150);
-  --verdant-950: oklch(0.98 0.04 150);
-
-  /* === Solar === */
-  --solar-50:  oklch(0.22 0.04 80);
-  --solar-100: oklch(0.28 0.06 82);
-  --solar-200: oklch(0.36 0.10 84);
-  --solar-300: oklch(0.86 0.16 88);
-  --solar-400: oklch(0.84 0.17 86);
-  --solar-500: oklch(0.82 0.18 84);
-  --solar-600: oklch(0.78 0.18 82);
-  --solar-700: oklch(0.72 0.17 80);
-  --solar-800: oklch(0.62 0.15 76);
-  --solar-900: oklch(0.50 0.12 72);
-
-  /* === Bio — electric on dark === */
-  --bio-50:  oklch(0.20 0.04 198);
-  --bio-100: oklch(0.26 0.06 198);
-  --bio-200: oklch(0.32 0.10 198);
-  --bio-300: oklch(0.82 0.14 195);
-  --bio-400: oklch(0.78 0.16 195);
-  --bio-500: oklch(0.74 0.17 195);
-  --bio-600: oklch(0.68 0.17 197);
-  --bio-700: oklch(0.58 0.15 200);
-  --bio-800: oklch(0.42 0.12 204);
-  --bio-900: oklch(0.30 0.09 208);
-
-  /* === Coral === */
-  --coral-300: oklch(0.78 0.16 35);
-  --coral-500: oklch(0.72 0.20 32);
-  --coral-700: oklch(0.62 0.18 28);
 
   /* === Lines === */
   --line:        oklch(0.99 0.005 90 / 0.10);
   --line-strong: oklch(0.99 0.005 90 / 0.18);
 
   /* === Semantic === */
-  --primary:     var(--verdant-500);
+  --primary:     oklch(var(--verdant-500));
   --primary-ink: oklch(0.10 0.02 145);
-  --accent:      var(--solar-500);
-  --bio:         var(--bio-500);
+  --accent:      oklch(var(--solar-500));
+  --bio:         oklch(var(--bio-500));
 
-  /* === Shadows — luminous glows for dark surfaces === */
+  /* === Shadows === */
   --shadow-leaf:
     0 1px 2px oklch(0 0 0 / 0.5),
     0 6px 18px oklch(0 0 0 / 0.4);
@@ -235,11 +190,21 @@
     0 0 0 1px oklch(0.74 0.18 150 / 0.5),
     0 10px 40px oklch(0.74 0.18 150 / 0.45);
 
-  /* === shadcn aliases — explicit re-bind for clarity + debuggability === */
-  --background:  var(--bg);
-  --foreground:  var(--ink);
-  --border:      var(--line-strong);
-  --ring:        var(--verdant-500);
+  /* === shadcn aliases === */
+  --background:           var(--bg);
+  --foreground:           var(--ink);
+  --card:                 var(--bg-elev);
+  --card-foreground:      var(--ink);
+  --popover:              var(--bg-elev);
+  --popover-foreground:   var(--ink);
+  --secondary:            var(--surface);
+  --secondary-foreground: var(--ink);
+  --muted:                var(--surface);
+  --muted-foreground:     var(--ink-soft);
+  --accent-foreground:    var(--ink);
+  --border:               var(--line-strong);
+  --input:                var(--line-strong);
+  --ring:                 oklch(var(--verdant-500));
 }
 
 /* ===== Base resets ===== */
@@ -276,12 +241,12 @@ html.dark body {
 }
 
 ::selection {
-  background: var(--solar-300);
-  color: var(--earth-900);
+  background: oklch(var(--solar-300));
+  color: oklch(var(--earth-900));
 }
 
 .dark ::selection {
-  background: var(--solar-500);
+  background: oklch(var(--solar-500));
   color: oklch(0.10 0.02 145);
 }
 
@@ -297,12 +262,12 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--verdant-300);
+  background: oklch(var(--verdant-300));
   border-radius: var(--r-md);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--verdant-400);
+  background: oklch(var(--verdant-400));
 }
 
 ::-webkit-scrollbar-track {
@@ -319,7 +284,7 @@ button {
 
 /* Firefox */
 html {
-  scrollbar-color: var(--verdant-300) transparent;
+  scrollbar-color: oklch(var(--verdant-300)) transparent;
   scrollbar-width: thin;
 }
 

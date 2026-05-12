@@ -491,7 +491,7 @@ export default function ProfilePageClient() {
 
         <aside className="flex flex-col gap-6">
           <section className="rounded-[2rem] border border-line-strong bg-bone-50 p-6 shadow-bloom dark:bg-earth-900/40 sm:p-7">
-            <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-500">
+            <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
               {t("wallet_summary")}
             </div>
             <div className="mt-4 text-3xl font-semibold text-earth-900 dark:text-bone-50">
