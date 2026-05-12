@@ -138,7 +138,7 @@ export default function ProjectActionPanel({
       args: [onChainId],
     })) as LiveProject;
 
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+    const backendUrl = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000").replace(/\/+$/, "");
 
     try {
       await fetch(`${backendUrl}/api/projects/${project.slug}/sync`, {

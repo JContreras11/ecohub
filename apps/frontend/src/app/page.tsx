@@ -15,21 +15,23 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const BACKEND_URL =
-  process.env.BACKEND_INTERNAL_URL ||
-  process.env.BACKEND_URL ||
-  process.env.NEXT_PUBLIC_BACKEND_URL ||
-  "http://localhost:4000";
+const BACKEND_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000").replace(/\/+$/, "");
 
 async function getProjects() {
-  const res = await fetch(`${BACKEND_URL}/api/projects?limit=12`, {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error(`Backend fetch failed: ${res.status} ${res.statusText}`);
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/projects?limit=12`, {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      console.error(`[HomePage] Backend fetch failed: ${res.status} ${res.statusText}`);
+      return [];
+    }
+    const data = await res.json();
+    return data.data || [];
+  } catch (err) {
+    console.error("[HomePage] Backend fetch error:", err);
+    return [];
   }
-  const data = await res.json();
-  return data.data || [];
 }
 
 export default async function HomePage() {

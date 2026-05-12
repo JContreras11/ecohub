@@ -248,7 +248,7 @@ function CreateProjectFormInner() {
         formData.append("image", imageFile);
       }
 
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+      const backendUrl = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000").replace(/\/+$/, "");
       const uploadRes = await fetch(`${backendUrl}/api/projects/upload`, {
         method: "POST",
         body:   formData,

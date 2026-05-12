@@ -1,7 +1,7 @@
 import { formatUsdcFromBaseUnits, shortenAddress } from "@/components/project-detail/helpers";
 
 export const PROFILE_BANNER_IMAGE = "/images/profile-banner.jpg";
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+export const BACKEND_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000").replace(/\/+$/, "");
 export const DEFAULT_AVATAR = "/images/avatar-placeholder.png";
 
 export { formatUsdcFromBaseUnits, shortenAddress };
