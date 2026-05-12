@@ -327,6 +327,10 @@
     "stage_label_01": "Stage 01",
     "stage_label_02": "Stage 02",
     "stage_label_03": "Stage 03",
+    "gallery_label": "Stage media",
+    "gallery_title": "Visual progress log",
+    "gallery_subtitle": "Photos and videos uploaded by the project team, grouped by stage.",
+    "gallery_count": "{count} assets",
     "meta_title_not_found": "Project not found",
     "meta_title_project": "Project"
   },

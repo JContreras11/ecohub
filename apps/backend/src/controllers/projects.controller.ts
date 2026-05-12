@@ -193,7 +193,10 @@ export async function getProject(req: Request, res: Response) {
 
     const project = await prisma.project.findUnique({
       where: { slug },
-      include: { contributions: { orderBy: { createdAt: "desc" }, take: 20 } },
+      include: {
+        contributions: { orderBy: { createdAt: "desc" }, take: 20 },
+        assets: { orderBy: [{ stage: "asc" }, { sortOrder: "asc" }] },
+      },
     });
 
     if (!project) return res.status(404).json({ error: "Project not found" });

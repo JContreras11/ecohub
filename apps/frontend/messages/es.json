@@ -327,6 +327,10 @@
     "stage_label_01": "Etapa 01",
     "stage_label_02": "Etapa 02",
     "stage_label_03": "Etapa 03",
+    "gallery_label": "Galería de etapas",
+    "gallery_title": "Evidencia visual del avance",
+    "gallery_subtitle": "Fotos y videos cargados por el equipo del proyecto, agrupados por etapa.",
+    "gallery_count": "{count} archivos",
     "meta_title_not_found": "Proyecto no encontrado",
     "meta_title_project": "Proyecto"
   },

@@ -15,6 +15,7 @@ import {
 import { formatProjectDate, formatUsdcFromBaseUnits, getFundingRatio, getProjectImageUrl, shortenAddress } from "./helpers";
 import type { BackendProject, LiveContribution, LiveProject } from "./types";
 import ProjectStageSection from "./ProjectStageSection";
+import StageAssetsGallery from "./StageAssetsGallery";
 import ContributorsPanel from "./ContributorsPanel";
 import ProjectActionPanel from "./ProjectActionPanel";
 
@@ -256,6 +257,12 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
             liveProject={liveProject}
             currentWithdrawable={currentWithdrawable}
             isLoading={isLiveProjectLoading || isWithdrawableLoading}
+            stageLabels={stageLabels}
+          />
+
+          <StageAssetsGallery
+            assets={project.assets}
+            currentStage={currentStage}
             stageLabels={stageLabels}
           />
 

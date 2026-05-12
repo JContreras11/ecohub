@@ -9,6 +9,20 @@ export interface BackendContribution {
   createdAt?: string;
 }
 
+export type AssetKind = "IMAGE" | "VIDEO" | "EMBED";
+
+export interface BackendProjectAsset {
+  id: string;
+  stage: number;
+  kind: AssetKind;
+  url: string;
+  thumbnailUrl?: string | null;
+  caption?: string | null;
+  description?: string | null;
+  capturedAt?: string | null;
+  sortOrder: number;
+}
+
 export interface BackendProject {
   id: string;
   slug: string;
@@ -26,6 +40,7 @@ export interface BackendProject {
   active: boolean;
   txHash?: string | null;
   contributions?: BackendContribution[];
+  assets?: BackendProjectAsset[];
   createdAt?: string;
   updatedAt?: string;
 }

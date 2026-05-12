@@ -30,8 +30,36 @@ model Project {
   updatedAt        DateTime @updatedAt @map("updated_at")
 
   contributions    Contribution[]
+  assets           ProjectAsset[]
 
   @@map("projects")
+}
+
+enum AssetKind {
+  IMAGE
+  VIDEO
+  EMBED
+
+  @@map("asset_kind")
+}
+
+model ProjectAsset {
+  id          String    @id @default(cuid())
+  projectId   String    @map("project_id")
+  stage       Int                                                     // 0-3 stage index this asset documents
+  kind        AssetKind
+  url         String                                                  // Local /public path, external URL, or embed (YouTube)
+  thumbnailUrl String?  @map("thumbnail_url")                         // Optional poster image for videos/embeds
+  caption     String?                                                 // Short label shown under asset
+  description String?   @db.Text                                      // Longer narrative for stage progress
+  capturedAt  DateTime? @map("captured_at")                           // When media was recorded
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, stage, sortOrder])
+  @@map("project_assets")
 }
 
 model Contribution {
