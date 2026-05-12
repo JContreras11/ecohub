@@ -1,6 +1,7 @@
 "use client";
 
 import { Coins, Sprout, Waves } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { PROJECT_DETAIL_STAGE_LABELS } from "@/lib/contracts";
 import { ProgressArc, StageBar } from "@/components/widgets";
 import { BRAND } from "@/lib/brand";
@@ -12,32 +13,25 @@ interface ProjectStageSectionProps {
   liveProject?: LiveProject;
   currentWithdrawable?: bigint;
   isLoading?: boolean;
+  stageLabels?: string[];
 }
-
-const STAGE_COPY = [
-  {
-    title: "Stage 01 · Funding root",
-    description: "Backers seed the escrow. Capital accumulates while the creator prepares the first deliverable.",
-    icon: Sprout,
-  },
-  {
-    title: "Stage 02 · Attest & release",
-    description: "Validators confirm the milestone and unlock the next tranche from the contract.",
-    icon: Waves,
-  },
-  {
-    title: "Stage 03 · Final canopy",
-    description: "The last claim releases the remaining balance, including any rounding remainder held by the escrow.",
-    icon: Coins,
-  },
-] as const;
 
 export default function ProjectStageSection({
   project,
   liveProject,
   currentWithdrawable,
   isLoading = false,
+  stageLabels,
 }: ProjectStageSectionProps) {
+  const t = useTranslations("ProjectDetail");
+  const labels = stageLabels ?? [t("stage_label_01"), t("stage_label_02"), t("stage_label_03")];
+
+  const stageCopy = [
+    { title: t("stage1_title"), description: t("stage1_desc"), icon: Sprout },
+    { title: t("stage2_title"), description: t("stage2_desc"), icon: Waves },
+    { title: t("stage3_title"), description: t("stage3_desc"), icon: Coins },
+  ] as const;
+
   const fundingGoal = liveProject?.fundingGoal ?? BigInt(project.fundingGoal || "0");
   const totalFunded = liveProject?.totalFunded ?? BigInt(project.totalFunded || "0");
   const currentStage = liveProject ? Number(liveProject.currentStage) : project.currentStage;
@@ -56,14 +50,13 @@ export default function ProjectStageSection({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-solar-600 dark:text-solar-300">
-              Stage tree
+              {t("stage_tree")}
             </div>
             <h2 className="display mt-3 text-3xl text-earth-900 dark:text-bone-50 sm:text-4xl">
-              Contract-aware milestone flow
+              {t("milestone_flow")}
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-earth-600 dark:text-bone-400">
-              This view follows the real {BRAND.contractName} contract: three claimable stages, live escrow totals,
-              and validator-gated releases instead of the four-stage mock shown in the design artboard.
+              {t("milestone_intro", { contract: BRAND.contractName })}
             </p>
           </div>
 
@@ -74,26 +67,25 @@ export default function ProjectStageSection({
                 {formatUsdcFromBaseUnits(totalFunded)}
               </div>
               <div className="text-xs text-earth-500 dark:text-verdant-300">
-                of {formatUsdcFromBaseUnits(fundingGoal)} goal funded
+                {t("of_goal_funded", { goal: formatUsdcFromBaseUnits(fundingGoal) })}
               </div>
               <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-verdant-700 dark:text-verdant-300">
-                {Math.round(fundingRatio * 100)}% live progress
+                {t("live_progress", { percent: Math.round(fundingRatio * 100) })}
               </div>
             </div>
           </div>
         </div>
 
-        <StageBar cachedCurrentStage={currentStage} stages={[...PROJECT_DETAIL_STAGE_LABELS]} />
+        <StageBar cachedCurrentStage={currentStage} stages={labels} />
 
         {project.onChainId == null && (
           <div className="rounded-[1.25rem] border border-dashed border-solar-400/60 bg-solar-100/60 px-4 py-3 text-sm text-solar-800 dark:bg-solar-900/20 dark:text-solar-200">
-            This project has not finished on-chain registration yet. Stage status uses backend cache until
-            `onChainId` becomes available.
+            {t("pending_registration")}
           </div>
         )}
 
         <div className="grid gap-4 xl:grid-cols-3">
-          {STAGE_COPY.map((stage, index) => {
+          {stageCopy.map((stage, index) => {
             const Icon = stage.icon;
             const state = index < currentStage ? "done" : index === currentStage ? "active" : "future";
             const amountForStage = index === stageCount - 1 ? finalTranche : baseTranche;
@@ -104,19 +96,19 @@ export default function ProjectStageSection({
                 wrapper: "border-verdant-300 bg-verdant-100/80 dark:border-verdant-700/40 dark:bg-verdant-900/20",
                 badge: "bg-verdant-500 text-bone-50",
                 accent: "text-verdant-700 dark:text-verdant-300",
-                label: "Validated release",
+                label: t("validated_release"),
               },
               active: {
                 wrapper: "border-solar-400 bg-solar-100/80 dark:border-solar-600/40 dark:bg-solar-900/20",
                 badge: "bg-solar-500 text-earth-950",
                 accent: "text-solar-800 dark:text-solar-200",
-                label: "Current claim window",
+                label: t("current_claim"),
               },
               future: {
                 wrapper: "border-line-strong bg-bone-50/90 dark:bg-earth-900/40",
                 badge: "bg-bone-300 text-earth-700 dark:bg-earth-800 dark:text-bone-200",
                 accent: "text-earth-500 dark:text-verdant-300",
-                label: "Queued behind previous release",
+                label: t("queued_release"),
               },
             }[state];
 
@@ -131,7 +123,7 @@ export default function ProjectStageSection({
                   </div>
                   <div className="text-right">
                     <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
-                      {PROJECT_DETAIL_STAGE_LABELS[index]}
+                      {labels[index]}
                     </div>
                     <div className={`mt-1 text-xs font-medium ${styles.accent}`}>{styles.label}</div>
                   </div>
@@ -144,15 +136,15 @@ export default function ProjectStageSection({
 
                 <div className="mt-5 rounded-[1.1rem] border border-black/5 bg-black/5 px-4 py-3 dark:border-white/5 dark:bg-white/5">
                   <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
-                    Estimated tranche
+                    {t("estimated_tranche")}
                   </div>
                   <div className="mt-2 font-display text-2xl text-earth-900 dark:text-bone-50">
                     {isLoading && state === "active"
-                      ? "Loading…"
+                      ? t("loading_ellipsis")
                       : formatUsdcFromBaseUnits(activeAmount, 0)}
                   </div>
                   <div className="mt-2 text-xs text-earth-500 dark:text-verdant-300">
-                    Final stage claims any remainder still held in escrow after earlier releases.
+                    {t("final_remainder")}
                   </div>
                 </div>
               </article>

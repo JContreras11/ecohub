@@ -2,11 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { Globe } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function LanguageSwitcher() {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations("Language");
 
   const toggleLocale = () => {
     const nextLocale = locale === "en" ? "es" : "en";
@@ -24,7 +25,7 @@ export default function LanguageSwitcher() {
       className="flex items-center gap-2 px-3 py-1.5 rounded-full
                  bg-verdant-900/40 border border-verdant-600/30 hover:bg-verdant-800/60
                  text-verdant-300 hover:text-verdant-100 transition-colors text-sm font-medium"
-      title="Cambiar idioma / Change language"
+      title={t("switch_title")}
     >
       <Globe className="w-4 h-4" />
       {locale.toUpperCase()}

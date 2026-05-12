@@ -5,6 +5,7 @@ import { useAccount, useChainId, useWriteContract } from "wagmi";
 import { readContract, waitForTransactionReceipt } from "wagmi/actions";
 import type { Address } from "viem";
 import { parseUnits } from "viem";
+import { useTranslations } from "next-intl";
 import { ArrowRight, Coins, LockKeyhole, Wallet } from "lucide-react";
 import {
   Dialog,
@@ -36,14 +37,14 @@ interface ProjectActionPanelProps {
   currentWithdrawable?: bigint;
   contributorCount: number;
   onRefresh: () => Promise<void>;
+  stageLabels?: string[];
 }
 
-function getErrorMessage(error: unknown): string {
+function getErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof Error) {
-    return error.message.split("\n")[0] || "Transaction failed";
+    return error.message.split("\n")[0] || fallback;
   }
-
-  return "Transaction failed";
+  return fallback;
 }
 
 export default function ProjectActionPanel({
@@ -53,7 +54,10 @@ export default function ProjectActionPanel({
   currentWithdrawable,
   contributorCount,
   onRefresh,
+  stageLabels,
 }: ProjectActionPanelProps) {
+  const t = useTranslations("ProjectDetail");
+  const labels = stageLabels ?? [t("stage_label_01"), t("stage_label_02"), t("stage_label_03")];
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { writeContractAsync } = useWriteContract();
@@ -85,44 +89,44 @@ export default function ProjectActionPanel({
     acceptedToken !== undefined &&
     acceptedToken !== ZERO_ADDRESS;
   const allStagesClaimed = currentStage >= PROJECT_DETAIL_STAGE_LABELS.length;
-  const withdrawLabel = PROJECT_DETAIL_STAGE_LABELS[Math.min(currentStage, PROJECT_DETAIL_STAGE_LABELS.length - 1)];
+  const withdrawLabel = labels[Math.min(currentStage, labels.length - 1)];
 
   const amountOptions = ["50", "250", "1000"];
 
   const statusCopy = useMemo(() => {
     if (project.onChainId == null) {
       return {
-        title: "Pending on-chain sync",
-        body: "Metadata exists in the backend cache, but the contract id has not been linked yet. Funding actions stay disabled until sync completes.",
+        title: t("status_pending_title"),
+        body: t("status_pending_body"),
       };
     }
 
     if (!hasContractRoute) {
       return {
-        title: "Wallet network unavailable",
-        body: `Connect to a configured ${BRAND.name} network before sending fund or withdraw transactions.`,
+        title: t("status_network_title"),
+        body: t("status_network_body", { brand: BRAND.name }),
       };
     }
 
     if (!liveProject?.active) {
       return {
-        title: "Funding closed",
-        body: "The contract currently marks this project inactive, so new contributions are blocked.",
+        title: t("status_closed_title"),
+        body: t("status_closed_body"),
       };
     }
 
     if (allStagesClaimed) {
       return {
-        title: "All tranches claimed",
-        body: "The project has already reached the end of its 3-stage release flow.",
+        title: t("status_claimed_title"),
+        body: t("status_claimed_body"),
       };
     }
 
     return {
-      title: "Escrow live",
-      body: "Allowance, funding, and withdrawals will sync back into the backend cache after each confirmed write.",
+      title: t("status_live_title"),
+      body: t("status_live_body"),
     };
-  }, [allStagesClaimed, hasContractRoute, liveProject?.active, project.onChainId]);
+  }, [allStagesClaimed, hasContractRoute, liveProject?.active, project.onChainId, t]);
 
   async function syncProjectCache(latestHash: `0x${string}`) {
     if (onChainId === undefined || contractAddress === ZERO_ADDRESS) return;
@@ -170,20 +174,20 @@ export default function ProjectActionPanel({
   async function handleFund() {
     if (!address) {
       setTxState("error");
-      setErrorMessage("Connect a wallet before funding this project.");
+      setErrorMessage(t("err_connect"));
       return;
     }
 
     if (!acceptedToken || onChainId === undefined || !hasContractRoute || !liveProject?.active) {
       setTxState("error");
-      setErrorMessage("Funding is unavailable until the contract route is fully configured.");
+      setErrorMessage(t("err_unavailable"));
       return;
     }
 
     const numericAmount = Number.parseFloat(customAmount);
     if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
       setTxState("error");
-      setErrorMessage("Enter a valid USDC amount greater than zero.");
+      setErrorMessage(t("err_amount"));
       return;
     }
 
@@ -199,7 +203,7 @@ export default function ProjectActionPanel({
       })) as bigint;
 
       if (allowance < amountBaseUnits) {
-        await runTransaction("Approve USDC", () =>
+        await runTransaction(t("approve_action"), () =>
           writeContractAsync({
             address: acceptedToken,
             abi: ERC20_ABI,
@@ -209,7 +213,7 @@ export default function ProjectActionPanel({
         );
       }
 
-      const fundHash = await runTransaction("Fund project", () =>
+      const fundHash = await runTransaction(t("fund_action"), () =>
         writeContractAsync({
           address: contractAddress,
           abi: ECOSPONSOR_ABI,
@@ -222,11 +226,11 @@ export default function ProjectActionPanel({
       await onRefresh();
 
       setTxState("success");
-      setSuccessMessage("Contribution confirmed and synced back into the project cache.");
+      setSuccessMessage(t("fund_success"));
       setIsFundOpen(false);
     } catch (error) {
       setTxState("error");
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(getErrorMessage(error, t("err_tx_failed")));
     } finally {
       setIsWorking(false);
     }
@@ -240,13 +244,13 @@ export default function ProjectActionPanel({
       currentStage >= PROJECT_DETAIL_STAGE_LABELS.length
     ) {
       setTxState("error");
-      setErrorMessage("Withdrawals are only available to the project owner when a stage is claimable.");
+      setErrorMessage(t("err_owner_only"));
       return;
     }
 
     try {
       setIsWorking(true);
-      const withdrawHash = await runTransaction("Withdraw stage", () =>
+      const withdrawHash = await runTransaction(t("withdraw_action"), () =>
         writeContractAsync({
           address: contractAddress,
           abi: ECOSPONSOR_ABI,
@@ -259,11 +263,11 @@ export default function ProjectActionPanel({
       await onRefresh();
 
       setTxState("success");
-      setSuccessMessage("Stage withdrawal confirmed and project progress refreshed.");
+      setSuccessMessage(t("withdraw_success"));
       setIsWithdrawOpen(false);
     } catch (error) {
       setTxState("error");
-      setErrorMessage(getErrorMessage(error));
+      setErrorMessage(getErrorMessage(error, t("err_tx_failed")));
     } finally {
       setIsWorking(false);
     }
@@ -275,9 +279,9 @@ export default function ProjectActionPanel({
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-verdant-700 dark:text-verdant-300">
-              Funding panel
+              {t("funding_panel")}
             </div>
-            <h2 className="display mt-3 text-3xl text-earth-900 dark:text-bone-50">Escrow overview</h2>
+            <h2 className="display mt-3 text-3xl text-earth-900 dark:text-bone-50">{t("escrow_overview")}</h2>
           </div>
           <ProgressArc value={fundingRatio} size={76} stroke={5} />
         </div>
@@ -285,23 +289,23 @@ export default function ProjectActionPanel({
         <div className="mt-5 grid grid-cols-2 gap-3">
           <div className="rounded-[1.35rem] border border-line-strong bg-bone-50/80 p-4 dark:bg-earth-900/40">
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
-              Funded
+              {t("funded")}
             </div>
             <div className="mt-2 font-display text-2xl text-earth-900 dark:text-bone-50">
               {formatUsdcFromBaseUnits(totalFunded)}
             </div>
             <div className="mt-1 text-xs text-earth-500 dark:text-verdant-300">
-              of {formatUsdcFromBaseUnits(fundingGoal)} goal
+              {t("of_goal", { goal: formatUsdcFromBaseUnits(fundingGoal) })}
             </div>
           </div>
 
           <div className="rounded-[1.35rem] border border-line-strong bg-bone-50/80 p-4 dark:bg-earth-900/40">
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
-              Backers
+              {t("backers")}
             </div>
             <div className="mt-2 font-display text-2xl text-earth-900 dark:text-bone-50">{contributorCount}</div>
             <div className="mt-1 text-xs text-earth-500 dark:text-verdant-300">
-              Distinct wallets seen
+              {t("distinct_wallets")}
             </div>
           </div>
         </div>
@@ -310,7 +314,7 @@ export default function ProjectActionPanel({
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-solar-300">{statusCopy.title}</div>
           <p className="mt-2 text-sm leading-relaxed text-bone-200/85">{statusCopy.body}</p>
           <div className="mt-3 text-xs text-bone-400">
-            Owner: <span className="font-mono text-bone-100">{shortenAddress(project.ownerAddress)}</span>
+            {t("owner_label")} <span className="font-mono text-bone-100">{shortenAddress(project.ownerAddress)}</span>
           </div>
         </div>
 
@@ -318,10 +322,10 @@ export default function ProjectActionPanel({
           <div className="mt-5 rounded-[1.35rem] border border-dashed border-line-strong bg-bone-50/70 p-4 dark:bg-earth-900/30">
             <div className="flex items-center gap-2 text-earth-900 dark:text-bone-50">
               <Wallet className="h-4 w-4 text-verdant-500" />
-              <span className="font-medium">Connect a wallet to fund or withdraw</span>
+              <span className="font-medium">{t("connect_to_fund")}</span>
             </div>
             <p className="mt-2 text-sm text-earth-500 dark:text-verdant-300">
-              The detail page still shows cached metadata without a wallet, but writes remain disabled.
+              {t("no_wallet_hint")}
             </p>
           </div>
         ) : isOwner ? (
@@ -332,10 +336,13 @@ export default function ProjectActionPanel({
               className="h-12 rounded-2xl bg-earth-900 text-bone-50 hover:bg-earth-800"
             >
               <LockKeyhole className="h-4 w-4" />
-              Withdraw {withdrawLabel}
+              {t("withdraw_stage_label", { label: withdrawLabel })}
             </Button>
             <p className="text-sm text-earth-500 dark:text-verdant-300">
-              Claimable now: {formatUsdcFromBaseUnits(currentWithdrawable ?? BigInt(0))} from stage {currentStage + 1}.
+              {t("claimable_now", {
+                amount: formatUsdcFromBaseUnits(currentWithdrawable ?? BigInt(0)),
+                stage: currentStage + 1,
+              })}
             </p>
           </div>
         ) : (
@@ -346,10 +353,10 @@ export default function ProjectActionPanel({
               className="h-12 rounded-2xl bg-verdant-600 text-bone-50 hover:bg-verdant-500"
             >
               <Coins className="h-4 w-4" />
-              Fund this project
+              {t("fund_project_btn")}
             </Button>
             <p className="text-sm text-earth-500 dark:text-verdant-300">
-              If allowance is missing, the app will request USDC approval before sending the contribution.
+              {t("fund_help")}
             </p>
           </div>
         )}
@@ -371,9 +378,9 @@ export default function ProjectActionPanel({
       <Dialog open={isFundOpen} onOpenChange={setIsFundOpen}>
         <DialogContent className="max-w-xl rounded-[2rem] border border-line-strong bg-bone-50 text-earth-900 shadow-bloom dark:bg-earth-900 dark:text-bone-50">
           <DialogHeader>
-            <DialogTitle className="display text-3xl">Fund current milestone</DialogTitle>
+            <DialogTitle className="display text-3xl">{t("fund_dialog_title")}</DialogTitle>
             <DialogDescription className="text-sm leading-relaxed text-earth-500 dark:text-verdant-300">
-              Contributions are transferred into the {BRAND.contractName} escrow contract for project #{project.id}.
+              {t("fund_dialog_desc", { contract: BRAND.contractName, id: project.id })}
             </DialogDescription>
           </DialogHeader>
 
@@ -397,7 +404,7 @@ export default function ProjectActionPanel({
 
             <div>
               <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
-                Custom amount (USDC)
+                {t("custom_amount")}
               </label>
               <Input
                 value={customAmount}
@@ -410,20 +417,20 @@ export default function ProjectActionPanel({
 
             <div className="rounded-[1.35rem] border border-line-strong bg-earth-900 px-4 py-4 text-bone-50 dark:border-verdant-700/20">
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-solar-300">
-                Approve → fund flow
+                {t("approve_flow_title")}
               </div>
               <p className="mt-2 text-sm text-bone-200/80">
-                The app checks allowance against the accepted token ({shortenAddress(acceptedToken)}) and only asks for approval if needed.
+                {t("approve_flow_body", { token: shortenAddress(acceptedToken ?? "") })}
               </p>
             </div>
           </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFundOpen(false)} disabled={isWorking} className="rounded-2xl border-line-strong">
-              Cancel
+              {t("cancel")}
             </Button>
             <Button onClick={() => void handleFund()} disabled={isWorking || !hasContractRoute} className="rounded-2xl bg-verdant-600 text-bone-50 hover:bg-verdant-500">
-              Continue to fund
+              {t("continue_fund")}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </DialogFooter>
@@ -433,41 +440,41 @@ export default function ProjectActionPanel({
       <Dialog open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen}>
         <DialogContent className="max-w-xl rounded-[2rem] border border-line-strong bg-bone-50 text-earth-900 shadow-bloom dark:bg-earth-900 dark:text-bone-50">
           <DialogHeader>
-            <DialogTitle className="display text-3xl">Withdraw current tranche</DialogTitle>
+            <DialogTitle className="display text-3xl">{t("withdraw_dialog_title")}</DialogTitle>
             <DialogDescription className="text-sm leading-relaxed text-earth-500 dark:text-verdant-300">
-              Only the recorded creator can release the current stage from escrow.
+              {t("withdraw_dialog_desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="rounded-[1.35rem] border border-line-strong bg-bone-50/80 p-4 dark:bg-earth-800/60">
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
-                Claiming now
+                {t("claiming_now")}
               </div>
               <div className="mt-2 font-display text-3xl text-earth-900 dark:text-bone-50">
                 {formatUsdcFromBaseUnits(currentWithdrawable ?? BigInt(0))}
               </div>
               <div className="mt-2 text-sm text-earth-500 dark:text-verdant-300">
-                {withdrawLabel} · contract stage index {currentStage}
+                {t("stage_index", { label: withdrawLabel, index: currentStage })}
               </div>
             </div>
 
             <div className="rounded-[1.35rem] border border-line-strong bg-earth-900 px-4 py-4 text-bone-50 dark:border-verdant-700/20">
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-solar-300">
-                Release guard
+                {t("release_guard")}
               </div>
               <p className="mt-2 text-sm text-bone-200/80">
-                After confirmation, the client refreshes live chain state and posts the updated totals back to the backend cache.
+                {t("release_guard_body")}
               </p>
             </div>
           </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsWithdrawOpen(false)} disabled={isWorking} className="rounded-2xl border-line-strong">
-              Cancel
+              {t("cancel")}
             </Button>
             <Button onClick={() => void handleWithdraw()} disabled={isWorking || !hasContractRoute || allStagesClaimed} className="rounded-2xl bg-earth-900 text-bone-50 hover:bg-earth-800">
-              Withdraw tranche
+              {t("withdraw_tranche")}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </DialogFooter>

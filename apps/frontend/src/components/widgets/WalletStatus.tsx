@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAccount, useChainId, useBalance, useEnsName } from "wagmi";
 import { mainnet } from "viem/chains";
+import { useTranslations } from "next-intl";
 
 interface WalletStatusProps {
   /** Show full address or truncated */
@@ -39,6 +40,7 @@ function WalletStatusInner({
   showNetwork = true,
   compact = false,
 }: WalletStatusProps) {
+  const t = useTranslations("Wallet");
   const { address, isConnected, isConnecting } = useAccount();
   const chainId = useChainId();
   const { data: balance } = useBalance({ address });
@@ -48,7 +50,7 @@ function WalletStatusInner({
     return (
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-bone-200 dark:bg-earth-800 animate-pulse">
         <div className="w-2 h-2 rounded-full bg-solar-500" />
-        <span className="text-xs font-mono text-earth-600 dark:text-solar-400">Connecting...</span>
+        <span className="text-xs font-mono text-earth-600 dark:text-solar-400">{t("connecting")}</span>
       </div>
     );
   }
@@ -56,7 +58,7 @@ function WalletStatusInner({
   if (!isConnected || !address) {
     return (
       <div className="text-xs font-mono text-earth-400 dark:text-verdant-700 italic">
-        Not connected
+        {t("not_connected")}
       </div>
     );
   }

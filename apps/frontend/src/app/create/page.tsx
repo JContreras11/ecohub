@@ -1,13 +1,16 @@
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { WindCanvas, WaterCursor } from "@/components/effects";
 import CreateProjectForm from "@/components/CreateProjectForm";
 import { brandTitle } from "@/lib/brand";
 
-export const metadata: Metadata = {
-  title: brandTitle("Sow your stage tree"),
-  description:
-    "Each stage is a milestone. Funds unlock only when validators attest. Define the path, and the forest will grow with you.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Create");
+  return {
+    title: brandTitle(t("meta_title")),
+    description: t("meta_description"),
+  };
+}
 
 const GREENHOUSE_IMAGE = "/images/create-greenhouse.jpg";
 

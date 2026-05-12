@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Loader2, CheckCircle2, XCircle, ExternalLink, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type TxState = 'idle' | 'pending' | 'confirming' | 'success' | 'error';
 
@@ -39,6 +40,7 @@ export default function TxFeedback({
   explorerUrl = 'https://optimism-sepolia.blockscout.com',
   onDismiss,
 }: TxFeedbackProps) {
+  const t = useTranslations("Tx");
   useEffect(() => {
     if (state === 'success' && mode === 'toast' && onDismiss) {
       const timer = setTimeout(() => onDismiss(), 5000);
@@ -56,22 +58,22 @@ export default function TxFeedback({
     case 'pending':
       styles = "bg-solar-100 dark:bg-solar-900/30 border-solar-400/30 text-solar-800 dark:text-solar-300";
       icon = <Loader2 className="w-5 h-5 animate-spin" />;
-      label = `${actionLabel ?? "Transaction"} — Waiting for signature…`;
+      label = t("waiting_signature", { action: actionLabel ?? t("transaction") });
       break;
     case 'confirming':
       styles = "bg-solar-100 dark:bg-solar-900/30 border-solar-400/30 text-solar-800 dark:text-solar-300";
       icon = <Loader2 className="w-5 h-5 animate-spin" />;
-      label = "Confirming on chain…";
+      label = t("confirming");
       break;
     case 'success':
       styles = "bg-verdant-100 dark:bg-verdant-900/30 border-verdant-400/30 text-verdant-800 dark:text-verdant-300";
       icon = <CheckCircle2 className="w-5 h-5" />;
-      label = successMessage ?? "Transaction confirmed!";
+      label = successMessage ?? t("confirmed");
       break;
     case 'error':
       styles = "bg-[oklch(0.95_0.04_35)] dark:bg-coral-700/20 border-coral-300/30 dark:border-coral-500/30 text-coral-700 dark:text-coral-300";
       icon = <XCircle className="w-5 h-5" />;
-      label = errorMessage ?? "Transaction failed";
+      label = errorMessage ?? t("failed");
       break;
   }
 
@@ -95,7 +97,7 @@ export default function TxFeedback({
               rel="noopener noreferrer"
               className="text-[10px] underline opacity-50 hover:opacity-100"
             >
-              View Explorer
+              {t("view_explorer")}
             </a>
           </div>
         )}

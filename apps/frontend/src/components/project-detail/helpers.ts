@@ -56,17 +56,17 @@ export function getFundingRatio(
   return Math.max(0, Math.min(1, ratio));
 }
 
-export function formatProjectDate(date?: string): string {
-  if (!date) return "Recently updated";
+export function formatProjectDate(date?: string, locale: string = "en-US"): string {
+  if (!date) return locale.startsWith("es") ? "Actualizado recientemente" : "Recently updated";
 
   try {
-    return new Intl.DateTimeFormat("en-US", {
+    return new Intl.DateTimeFormat(locale, {
       month: "short",
       day: "numeric",
       year: "numeric",
     }).format(new Date(date));
   } catch {
-    return "Recently updated";
+    return locale.startsWith("es") ? "Actualizado recientemente" : "Recently updated";
   }
 }
 

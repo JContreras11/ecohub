@@ -2,18 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useReadContract, useChainId } from "wagmi";
+import { useTranslations } from "next-intl";
 import { ECOSPONSOR_ABI, getContractAddress } from "@/lib/contracts";
 
 interface StageBarProps {
-  /** On-chain project ID — if provided, reads currentStage via wagmi */
   projectId?: bigint;
-  /** DB-cached current stage index (0-based) — avoids RPC when provided */
   cachedCurrentStage?: number;
-  /** Stage labels — defaults to ["Funding", "Development", "Delivery"] */
   stages?: string[];
 }
 
-/** Pure rendering — no hooks */
 function StageBarVisual({
   current,
   stages,
@@ -52,15 +49,13 @@ function StageBarVisual({
   );
 }
 
-/** Inner component — uses wagmi hooks, only rendered client-side after mount */
 function StageBarInner({
   projectId,
   cachedCurrentStage,
-  stages = ["Funding", "Development", "Delivery"],
-}: StageBarProps) {
+  stages,
+}: StageBarProps & { stages: string[] }) {
   const chainId = useChainId();
 
-  // On-chain read (only if projectId provided and no cached value)
   const { data: project } = useReadContract({
     address: getContractAddress(chainId),
     abi: ECOSPONSOR_ABI,
@@ -71,24 +66,25 @@ function StageBarInner({
     }
   });
 
-  const current = cachedCurrentStage !== undefined 
-    ? cachedCurrentStage 
+  const current = cachedCurrentStage !== undefined
+    ? cachedCurrentStage
     : (project ? Number(project.currentStage) : 0);
 
   return <StageBarVisual current={current} stages={stages} />;
 }
 
-/** Exported component — applies mounted guard to protect wagmi hooks from SSR */
 export default function StageBar(props: StageBarProps) {
-  const { cachedCurrentStage, stages = ["Funding", "Development", "Delivery"] } = props;
+  const t = useTranslations("StageBar");
+  const defaultStages = [t("funding"), t("development"), t("delivery")];
+  const stages = props.stages ?? defaultStages;
+  const { cachedCurrentStage } = props;
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // If we have cached data, render immediately without waiting for mount (zero layout shift)
   if (!mounted) {
     const current = cachedCurrentStage !== undefined ? cachedCurrentStage : 0;
     return <StageBarVisual current={current} stages={stages} />;
   }
 
-  return <StageBarInner {...props} />;
+  return <StageBarInner {...props} stages={stages} />;
 }

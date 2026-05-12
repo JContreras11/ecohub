@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useChainId, useReadContract } from "wagmi";
+import { useTranslations, useLocale } from "next-intl";
 import { Coins, Leaf, MapPin, ShieldCheck } from "lucide-react";
 import { WaterCursor, WindCanvas } from "@/components/effects";
 import {
@@ -22,11 +23,15 @@ interface ProjectDetailClientProps {
 }
 
 export default function ProjectDetailClient({ project }: ProjectDetailClientProps) {
+  const t = useTranslations("ProjectDetail");
+  const locale = useLocale();
   const router = useRouter();
   const chainId = useChainId();
   const contractAddress = getContractAddress(chainId || 11155111);
   const onChainId = project.onChainId != null ? BigInt(project.onChainId) : undefined;
   const canReadOnChain = onChainId !== undefined && contractAddress !== ZERO_ADDRESS;
+
+  const stageLabels = [t("stage_label_01"), t("stage_label_02"), t("stage_label_03")];
 
   const {
     data: liveProjectRaw,
@@ -134,6 +139,8 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
     router.refresh();
   }
 
+  const stageLabelForHero = stageLabels[Math.min(currentStage, stageLabels.length - 1)];
+
   return (
     <div className="bg-[var(--bg)]">
       <section className="relative overflow-hidden bg-earth-950 text-bone-50">
@@ -159,11 +166,11 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
               <div className="mb-5 flex flex-wrap gap-2.5">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-solar-300/30 bg-solar-400/90 px-3 py-1 text-xs font-medium text-earth-950">
                   <span className="h-1.5 w-1.5 rounded-full bg-earth-950" />
-                  {project.onChainId == null ? "Pending sync" : `Funding · ${PROJECT_DETAIL_STAGE_LABELS[Math.min(currentStage, PROJECT_DETAIL_STAGE_LABELS.length - 1)]}`}
+                  {project.onChainId == null ? t("pending_sync") : t("funding_stage", { stage: stageLabelForHero })}
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-bone-50/20 bg-bone-50/10 px-3 py-1 text-xs font-medium text-bone-50/90">
                   <ShieldCheck className="h-3.5 w-3.5" />
-                  {project.onChainId == null ? "Backend metadata live" : "Contract state live"}
+                  {project.onChainId == null ? t("metadata_live") : t("contract_live")}
                 </span>
                 {project.tags?.slice(0, 2).map((tag) => (
                   <span
@@ -187,55 +194,55 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
                 <div>
                   <div className="text-sm font-medium text-bone-50">{shortenAddress(project.ownerAddress)}</div>
                   <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-solar-200">
-                    Creator wallet
+                    {t("creator_wallet")}
                   </div>
                 </div>
                 <div className="hidden h-10 w-px bg-bone-50/20 sm:block" />
                 <div>
-                  <div className="text-sm font-medium text-bone-50">DB project #{project.id}</div>
+                  <div className="text-sm font-medium text-bone-50">{t("db_project", { id: project.id })}</div>
                   <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-verdant-200">
-                    {project.onChainId == null ? "Awaiting chain id" : `On-chain id ${project.onChainId}`}
+                    {project.onChainId == null ? t("awaiting_chain_id") : t("onchain_id", { id: project.onChainId })}
                   </div>
                 </div>
                 <div className="hidden h-10 w-px bg-bone-50/20 sm:block" />
                 <div>
-                  <div className="text-sm font-medium text-bone-50">{formatProjectDate(project.updatedAt || project.createdAt)}</div>
+                  <div className="text-sm font-medium text-bone-50">{formatProjectDate(project.updatedAt || project.createdAt, locale)}</div>
                   <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-bio-200">
-                    Last cached update
+                    {t("last_cached")}
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="rounded-[2rem] border border-bone-50/15 bg-bone-50/10 p-6 backdrop-blur-xl shadow-bloom">
-              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-solar-200">Funding snapshot</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-solar-200">{t("funding_snapshot")}</div>
               <div className="mt-5 flex items-start justify-between gap-4">
                 <div>
                   <div className="display text-4xl text-bone-50">{formatUsdcFromBaseUnits(totalFunded)}</div>
                   <div className="mt-2 text-sm text-bone-50/75">
-                    of {formatUsdcFromBaseUnits(fundingGoal)} goal
+                    {t("of_goal", { goal: formatUsdcFromBaseUnits(fundingGoal) })}
                   </div>
                 </div>
                 <div className="rounded-full border border-bone-50/15 bg-bone-50/10 px-3 py-2 text-right">
                   <div className="text-lg font-semibold text-bone-50">{Math.round(fundingRatio * 100)}%</div>
-                  <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-50/65">Live ratio</div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-50/65">{t("live_ratio")}</div>
                 </div>
               </div>
               <div className="mt-5 grid grid-cols-2 gap-3">
                 <div className="rounded-[1.25rem] bg-black/15 px-4 py-3">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-50/60">Backers</div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-50/60">{t("backers")}</div>
                   <div className="mt-2 text-2xl font-semibold text-bone-50">{contributorCount}</div>
                 </div>
                 <div className="rounded-[1.25rem] bg-black/15 px-4 py-3">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-50/60">Current stage</div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-50/60">{t("current_stage")}</div>
                   <div className="mt-2 text-2xl font-semibold text-bone-50">{Math.min(currentStage + 1, 3)}</div>
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-2 text-sm text-bone-50/70">
                 <Coins className="h-4 w-4 text-solar-300" />
                 {project.onChainId == null
-                  ? "Actions stay disabled until on-chain sync completes."
-                  : "Live contract reads override cached totals whenever possible."}
+                  ? t("actions_disabled")
+                  : t("live_overrides")}
               </div>
             </div>
           </div>
@@ -249,13 +256,14 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
             liveProject={liveProject}
             currentWithdrawable={currentWithdrawable}
             isLoading={isLiveProjectLoading || isWithdrawableLoading}
+            stageLabels={stageLabels}
           />
 
           <section className="rounded-[2rem] border border-line-strong bg-bone-50 p-6 shadow-bloom dark:bg-earth-900/40 sm:p-8">
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-verdant-100 px-3 py-1 text-xs font-semibold text-verdant-800 dark:bg-verdant-900/30 dark:text-verdant-300">
                 <MapPin className="h-3.5 w-3.5" />
-                README + metadata
+                {t("readme_metadata")}
               </span>
               {project.metadataCid && (
                 <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-earth-500 dark:text-verdant-300">
@@ -264,7 +272,7 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
               )}
             </div>
             <h2 className="display mt-4 text-3xl text-earth-900 dark:text-bone-50 sm:text-4xl">
-              About this project
+              {t("about_project")}
             </h2>
             <div className="mt-5 whitespace-pre-wrap text-[15px] leading-8 text-earth-700 dark:text-bone-300">
               {readmeContent}
@@ -285,6 +293,7 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
           currentWithdrawable={currentWithdrawable}
           contributorCount={contributorCount}
           onRefresh={refreshLiveData}
+          stageLabels={stageLabels}
         />
       </div>
     </div>

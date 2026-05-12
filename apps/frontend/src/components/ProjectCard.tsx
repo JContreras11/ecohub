@@ -4,6 +4,7 @@ import { ExternalLink, Globe, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ProgressArc, StageBar } from "@/components/widgets";
 
 interface Project {
@@ -44,6 +45,7 @@ function shortenAddress(address: string): string {
 }
 
 export default function ProjectCard({ project, layout = "grid" }: ProjectCardProps) {
+  const t = useTranslations("ProjectCard");
   const router = useRouter();
   const fundedPercent = Math.min(
     100,
@@ -75,7 +77,7 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
         onKeyDown={handleKeyDown}
         role="link"
         tabIndex={0}
-        aria-label={`Open ${project.title}`}
+        aria-label={t("open", { title: project.title })}
       >
         <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl">
           <Image
@@ -168,7 +170,7 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
         <div className="flex items-center justify-between border-t border-line-strong py-4 dark:border-earth-800">
           <div className="flex flex-col">
             <span className="mb-1 text-[10px] font-mono uppercase tracking-widest text-earth-400 dark:text-verdant-400">
-              Funding Progress
+              {t("funding_progress")}
             </span>
             <div className="flex items-baseline gap-1">
               <span className="text-lg font-bold text-earth-900 dark:text-verdant-100">
@@ -193,7 +195,7 @@ export default function ProjectCard({ project, layout = "grid" }: ProjectCardPro
             className="flex items-center gap-1.5 text-xs font-medium text-bio-600 transition-colors hover:text-bio-700 dark:text-bio-400 dark:hover:text-bio-300"
           >
             <Globe className="h-3 w-3" />
-            IPFS
+            {t("ipfs")}
             <ExternalLink className="h-2.5 w-2.5" />
           </a>
         </div>

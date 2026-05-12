@@ -5,6 +5,7 @@ import { metaMask, walletConnect } from "wagmi/connectors";
 import { useState, useEffect } from "react";
 import { Wallet, ChevronDown, LogOut, Copy, Check, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 function shortenAddress(address: string): string {
   return `${address.slice(0, 6)}…${address.slice(-4)}`;
@@ -22,6 +23,7 @@ function getChainName(chainId: number): string {
 }
 
 function ConnectWalletInner() {
+  const t = useTranslations("Wallet");
   const { address, isConnected } = useAccount();
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
@@ -36,14 +38,14 @@ function ConnectWalletInner() {
     if (!address) return;
     await navigator.clipboard.writeText(address);
     setCopied(true);
-    toast.success("Address copied!");
+    toast.success(t("address_copied"));
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDisconnect = () => {
     disconnect();
     setShowMenu(false);
-    toast.info("Wallet disconnected");
+    toast.info(t("wallet_disconnected"));
   };
 
   if (isConnected && address) {
@@ -86,7 +88,7 @@ function ConnectWalletInner() {
                             border border-verdant-500/20 rounded-2xl shadow-card overflow-hidden">
               {/* Header */}
               <div className="p-4 border-b border-verdant-700/30">
-                <p className="text-xs text-verdant-500 mb-1">Connected Wallet</p>
+                <p className="text-xs text-verdant-500 mb-1">{t("connected_wallet")}</p>
                 <p className="font-mono text-sm text-verdant-200 break-all">{address}</p>
                 {balance && (
                   <p className="text-xs text-verdant-400 mt-1">
@@ -109,7 +111,7 @@ function ConnectWalletInner() {
                   ) : (
                     <Copy className="w-4 h-4" />
                   )}
-                  {copied ? "Copied!" : "Copy Address"}
+                  {copied ? t("copied") : t("copy_address")}
                 </button>
 
                 <button
@@ -120,7 +122,7 @@ function ConnectWalletInner() {
                              transition-all duration-150 text-sm mt-1"
                 >
                   <LogOut className="w-4 h-4" />
-                  Disconnect
+                  {t("disconnect")}
                 </button>
               </div>
             </div>
@@ -144,7 +146,7 @@ function ConnectWalletInner() {
                    border border-verdant-400/20 group"
       >
         <Wallet className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-        {isPending ? "Connecting…" : "Connect Wallet"}
+        {isPending ? t("connecting") : t("connect_wallet")}
       </button>
 
       {/* Connector selection dropdown */}
@@ -158,7 +160,7 @@ function ConnectWalletInner() {
                           bg-earth-800/95 backdrop-blur-xl
                           border border-verdant-500/20 rounded-2xl shadow-card overflow-hidden">
             <div className="p-3 border-b border-verdant-700/30">
-              <p className="text-xs text-verdant-500 text-center">Choose a wallet</p>
+              <p className="text-xs text-verdant-500 text-center">{t("choose_wallet")}</p>
             </div>
             <div className="p-2 space-y-1">
               {connectors.map((connector) => (

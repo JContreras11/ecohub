@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import ProjectDetailClient from "@/components/project-detail/ProjectDetailClient";
 import type { BackendProject } from "@/components/project-detail/types";
 import { brandTitle } from "@/lib/brand";
@@ -34,10 +35,11 @@ async function getProject(id: number): Promise<BackendProject> {
 export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
   const { id } = await params;
   const projectId = Number.parseInt(id, 10);
+  const t = await getTranslations("ProjectDetail");
 
   if (!Number.isInteger(projectId) || projectId <= 0) {
     return {
-      title: brandTitle("Project not found"),
+      title: brandTitle(t("meta_title_not_found")),
     };
   }
 
@@ -49,7 +51,7 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
     };
   } catch {
     return {
-      title: brandTitle("Project"),
+      title: brandTitle(t("meta_title_project")),
     };
   }
 }
